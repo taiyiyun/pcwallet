@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?=$lang->wallet->change_receiving_address_label?> - <?=$lang->common->taiyi?></title>
+<link href="/css/<?=$l?>/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/home.css" />
+
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/raphael.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="/js/jquery.boxy.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/boxy.css" />
+</head>
+
+<body>
+<?php include PATH_TPL . '/'. LANG ."/header.tpl.phtml" ?>
+<div id="main">
+	<?php include PATH_TPL . '/'. LANG ."/wallet/wallet.header.tpl.phtml" ?>	
+	<!-- 添加新地址 开始 -->
+	<div class="my_wallet my_add clearfix">
+		<h2 class="Font18 left"><?=$lang->wallet->change_receiving_address_label?></h2>
+		<div class="Font14 right operate_wallet">
+			<a href="/wallet/listreceivedbyaddress?wallet=<?=$tWallet?>"><?=$lang->wallet->back_to_receiving_address?></a>
+		</div>
+	</div>
+	<div class="wallet wallet_tabel clearfix">
+		<form id='myform'>
+			<ul class="coin_money">
+				<li><label><?=$lang->wallet->address_label?></label><input type="text" class="left" name='account' value='<?=$tAccount?>' /></li>
+				<li><label><?=$lang->wallet->address?></label><?=$tAddress?><input type="hidden" class="left" name='address' value='<?=$tAddress?>' /></li>
+				<li><label>&nbsp;</label><input type="button" class="btn_sub" value="<?=$lang->common->change?>" /></li>
+			</ul>
+		</form>
+	</div>
+	<!-- 添加新地址 结束 -->
+</div>
+<?php include PATH_TPL . '/'. LANG ."/wallet/wallet.footer.tpl.phtml" ?>
+<?php include PATH_TPL . '/'. LANG ."/footer.tpl.phtml" ?>
+</body>
+</html>
+<script>
+$(function(){
+	$('.btn_sub').click(function(){
+		var tData = $('#myform').serialize();		
+		$(this).after('<img src="/images/loading02.gif">');
+		$('.btn_sub').attr('disabled','true');
+		$.get('/wallet/listreceivedbyaddressedit?wallet=<?=$tWallet?>&mysubmit=1',tData , function(obj){
+			var obj = eval('('+obj+')');		
+			if(obj.status == 1){
+				js_alert(obj.msg , '/wallet/listreceivedbyaddress?wallet=<?=$tWallet?>');
+			}else{
+				js_alert(obj.msg);
+				$('.btn_sub').next('img').remove();
+			}
+			$('.btn_sub').removeAttr('disabled');
+		});
+	});
+})
+</script>
+

@@ -1,0 +1,25 @@
+@charset "utf-8";
+/* CSS Document */
+.boxy-wrapper{position:absolute;}
+.boxy-wrapper.fixed{position:fixed;}
+/* Modal */ 
+.boxy-modal-blackout{position:absolute; background-color:black; left:0; top:0;} 
+
+/* Title bar */
+.boxy-wrapper .title-bar{background-color:#29a8e1; padding:6px; position:relative; height:40px; border-radius:6px 6px 0 0;}
+.boxy-wrapper .title-bar.dragging{cursor:move;}
+.boxy-wrapper .title-bar h2{ font-size:16px; height:40px; line-height:40px; color:#fff; margin:0; padding:0; font-weight:normal;}
+.boxy-wrapper .title-bar .close{ color:#fff; position:absolute; top:6px; right:6px; height:20px; line-height:20px; width:20px; text-align:center; border-radius:20px; font-size:16px; font-family:Arial; text-decoration:none;}
+.boxy-wrapper .title-bar .close:hover{ background-color:#f00;}
+.popup{ margin-bottom:30px;}
+.boxy-content p{ text-align:center; font-size:16px;}
+.boxy-content a{ border:1px solid #29a8e1; border-radius:5px; color:#29a8e1; padding:8px 16px; text-decoration:none; margin:10px;}
+.boxy-content a:hover{ border:1px solid #29a8e1; background:#29a8e1; color:#fff;}
+/* Content Region */
+.boxy-inner{background-color:#e6f5fb; border-radius:7px; padding:0; width:400px;}
+.boxy-content{padding:30px;}
+/* Question Boxes */
+.boxy-btn2{ cursor:pointer; background:#fff; border:1px solid #29a8e1; border-radius:5px; color:#29a8e1; padding:8px 16px; text-decoration:none; margin:10px 5px;}
+.boxy-btn2:hover{ border:1px solid #29a8e1; background:#29a8e1; color:#fff;}
+.boxy-btn3{  cursor:pointer;background:#fff; border:1px solid #29a8e1; border-radius:5px; color:#29a8e1; padding:8px 16px; text-decoration:none; margin:10px 5px;}
+.boxy-btn3:hover{ border:1px solid #29a8e1; background:#29a8e1; color:#fff;}

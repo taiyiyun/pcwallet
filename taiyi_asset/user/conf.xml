@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<conf>
+	<rpcport>9490</rpcport>
+	<service_list>
+	<service>
+	<path>..\bin\wallets\cfos\</path>
+	<name>cfos</name>
+	<executable_file>cfos.exe</executable_file>
+	<arg>-datadir="C:\ProgramData\taiyi\abcoin" -checkblocks=1 -progressnotify="wnmp\php5\php.exe wallets\cfos\cfosinfo\updateinfo.php getinfo %d %d"</arg>
+	</service>
+	</service_list>
+</conf>

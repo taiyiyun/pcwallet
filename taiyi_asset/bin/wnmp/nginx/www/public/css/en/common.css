@@ -1,0 +1,51 @@
+body,html,h1,h2,h3,h4,h5,h6,div,p,ul,li,span,form,input,a,img{ margin:0; padding:0;}
+img{ border:0;}
+body{ width:100%; min-width:1000px; _min-width:1000px; font-family:'Microsoft Yahei','simyou','幼圆','\5FAE\8F6F\96C5\9ED1',Arial,'Hiragino Sans GB','\5B8B\4F53'}
+.clearfix:after{ content:"."; display:block; clear:both; height:0; overflow:hidden;}
+.clearfix{ zoom:1;}
+.left{ float:left;}
+.right{ float:right;}
+li{ list-style:none;}
+h1,h2,h3,h4,h5,h6{ font-weight:normal;}
+.Font12{ font-size:12px;}
+.Font14{ font-size:14px;}
+.Font16{ font-size:16px;}
+.Font18{ font-size:18px;}
+.Font20{ font-size:20px;}
+.Font24{ font-size:24px;}
+.Font30{ font-size:30px;}
+.Font50{ font-size:50px;}
+
+#header{ width:100%;}
+.navbar{ width:100%; height:40px; padding:35px 0; border-top:10px solid #29a8e1; border-bottom:1px solid #ccc;}
+.navbar .logo{ margin-left:30px;}
+.navbar ul{ margin-top:20px; margin-right:10px;}
+.navbar ul li{ float:left; margin-right:20px; height:20px; line-height:20px;}
+.navbar ul li a{ cursor:pointer;}
+.navbar ul li a.nav:link{ display:block; background:url(/images/ty_icon.png) 0 0 no-repeat; padding-left:25px; color:#666; text-decoration:none;}
+.navbar ul li a.nav:visited{ display:block; background:url(/images/ty_icon.png) 0 0 no-repeat; padding-left:25px; color:#666; text-decoration:none;}
+.navbar ul li a.nav:hover{ display:block; background:url(/images/ty_icon.png) 0 -50px no-repeat; color:#29a8e1;}
+.navbar ul li a.nav:active{ display:block; background:url(/images/ty_icon.png) 0 0 no-repeat; padding-left:25px; color:#666; text-decoration:none;}
+.navbar ul li a.nav.current{ display:block; background:url(/images/ty_icon.png) 0 -50px no-repeat; color:#29a8e1;}
+.navbar ul li a.nav1:link{ display:block; background:url(/images/ty_icon.png) 0 -150px no-repeat; padding-left:25px; color:#666; text-decoration:none;}
+.navbar ul li a.nav1:visited{ display:block; background:url(/images/ty_icon.png) 0 -150px no-repeat; padding-left:25px; color:#666; text-decoration:none;}
+.navbar ul li a.nav1:hover{ display:block; background:url(/images/ty_icon.png) 0 -200px no-repeat; color:#29a8e1;}
+.navbar ul li a.nav1:active{ display:block; background:url(/images/ty_icon.png) 0 -150px no-repeat; padding-left:25px; color:#666; text-decoration:none;}
+.navbar ul li a.nav1.current{ display:block; background:url(/images/ty_icon.png) 0 -200px no-repeat; color:#29a8e1;}
+.navbar ul li a.nav2:link{ display:block; background:url(/images/ty_icon.png) 0 -250px no-repeat; padding-left:25px; color:#666; text-decoration:none;}
+.navbar ul li a.nav2:visited{ display:block; background:url(/images/ty_icon.png) 0 -250px no-repeat; padding-left:25px; color:#666; text-decoration:none;}
+.navbar ul li a.nav2:hover{ display:block; background:url(/images/ty_icon.png) 0 -300px no-repeat; color:#29a8e1;}
+.navbar ul li a.nav2:active{ display:block; background:url(/images/ty_icon.png) 0 -250px no-repeat; padding-left:25px; color:#666; text-decoration:none;}
+.navbar ul li a.nav2.current{ display:block; background:url(/images/ty_icon.png) 0 -300px no-repeat; color:#29a8e1;}
+.navbar ul li .nav .news_message{ display:block; background:#f00; color:#fff; border-radius:15px; width:18px; text-align:center; height:18px; line-height:18px;}
+.navbar ul li a.back:link{ display:block; background:url(/images/ty_back.png) 0 0 no-repeat; padding-left:25px; color:#666; text-decoration:none;}
+.navbar ul li a.back:visited{ display:block; background:url(/images/ty_back.png) 0 0 no-repeat; padding-left:25px; color:#666; text-decoration:none;}
+.navbar ul li a.back:hover{ display:block; background:url(/images/ty_back.png) 0 -50px no-repeat; color:#f00;}
+.navbar ul li a.back:active{ display:block; background:url(/images/ty_back.png) 0 -50px no-repeat; color:#29a8e1;}
+
+#main{ width:100%; min-height:400px; _min-height:400px; margin-bottom:100px;}
+
+#footer{ width:100%; height:140px; padding-top:80px; background:#29a8e1;}
+#footer p{ text-align:center; color:#fff; margin-bottom:10px;}
+#footer p a{ color:#fff; text-decoration:none;}
+#footer p a:hover{ text-decoration:underline;}

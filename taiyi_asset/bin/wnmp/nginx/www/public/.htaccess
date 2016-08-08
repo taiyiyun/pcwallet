@@ -1,0 +1,9 @@
+<Files *>
+Options -Indexes
+</Files>
+
+RewriteEngine On
+RewriteRule \.svn\/  /robots.txt
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule .* index.php

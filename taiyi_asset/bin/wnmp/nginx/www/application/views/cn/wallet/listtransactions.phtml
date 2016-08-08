@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?=$lang->wallet->transaction_records?> - <?=$lang->common->taiyi?></title>
+<link href="/css/<?=$l?>/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/home.css" />
+
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/raphael.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+</head>
+
+<body>
+<?php include PATH_TPL . '/'. LANG ."/header.tpl.phtml" ?>
+<div id="main">
+
+	<?php include PATH_TPL . '/'. LANG ."/wallet/wallet.header.tpl.phtml" ?>	
+	
+	<!-- 地址簿 开始 -->
+	<div class="my_wallet my_add clearfix">
+		<h2 class="Font18 left"><?=$lang->wallet->transaction_records?></h2>
+		<div class="Font14 right operate_wallet">
+			<a href="/wallet/more?wallet=<?=$tWallet?>"><?=$lang->wallet->back_for_more_options?></a>
+		</div>
+	</div>
+	<div class="wallet wallet_tabel clearfix">
+		<table cellpadding="0" cellspacing="0" class="Font14 add_tabel">
+			<thead>
+				<tr>
+					<th><?=$lang->common->date?></th>
+					<th><?=$lang->wallet->transaction_id?></th>
+					<th><?=$lang->wallet->depth?></th>
+					<th><?=$lang->common->type?></th>
+					<th><?=$lang->wallet->address?></th>
+					<th><?=$lang->common->quantity?></th>
+				</tr>
+			</thead>
+			<tbody id='tBody'>
+			</tbody>
+		</table>
+	</div>
+	<!-- 地址簿 结束 -->
+</div>
+<?php include PATH_TPL . '/'. LANG ."/wallet/wallet.footer.tpl.phtml" ?>
+<?php include PATH_TPL . '/'. LANG ."/footer.tpl.phtml" ?>
+</body>
+</html>
+<script>
+$(function(){
+	getlisttransactions();
+})
+function  getlisttransactions(){
+	$('#tBody').html('<img src="/images/loading02.gif">');
+	$.getJSON('/wallet/listtransactions?wallet=<?=$tWallet?>&backdata=ajax'+'&stamp='+Math.random(),function(obj){
+		if(obj.status == 0){
+			$('#tBody').html(obj.msg);
+		}else{
+			var str = '';
+			$.each(obj.data , function(key,tRow){
+				var width = screen.width;
+				var txid = tRow.txid;
+				var newtxid = '';
+				if((width ==  undefined || width <= 1440) && txid != undefined){
+					newtxid = txid.substr(0,12)+'...';
+				}else{
+					newtxid = txid;			
+				}
+				var url = '#';
+				if(tRow.explorer != '' && tRow.explorer != null){
+					url = tRow.explorer+'tx/'+tRow.txid
+				}
+				var addressurl = '#';
+				if(tRow.explorer != '' && tRow.explorer != null){
+					addressurl = tRow.explorer+'address/'+tRow.address;
+				}
+
+				str += '<tr align="center"><td>'+tRow.date+'</td><td><a class="modify txid" title="'+txid+'" href=\''+url+'\' target=\'_blank\'>'+newtxid+'</a></td><td>'+tRow.depth+'</td><td>'+tRow.category+'</td><td><a title=\''+tRow.label+'\' href=\''+addressurl+'\' target=\'_blank\' class="modify">'+tRow.address+'</a></td><td>'+tRow.amount+'</td></tr>';
+			
+			});
+			$('#tBody').html(str);
+		}
+	});		
+}
+</script>

@@ -1,0 +1,11 @@
+<div id="header">
+	<div class="navbar clearfix">
+		<div class="logo left"><a href="/"><?if($l =='en'){?><img src="/images/ty_logoen.png" /><?}else{?><img src="/images/ty_logo.png" /><?}?></a></div>
+		<ul class="right Font16">
+			<li><a href="/mywallet" class="nav <?php if(empty($tHeadact)){?> current<?}else{?> <?}?>"><?=$lang->main->my_wallet?></a></li>
+			<li><a href="/message" class="left nav <?php if(!empty($tHeadact) && $tHeadact == 'message'){?> current<?}else{?> <?}?> nav1"><span class="left"><?=$lang->main->message?></span><span class="left news_message Font12" id='messagecount' style='display:none'>0</span></a></li>
+			<li><a href="/system/" class="nav <?php if(!empty($tHeadact) && $tHeadact == 'system'){?> current<?}else{?> <?}?> nav2"><?=$lang->main->settings?></a></li>
+			<li><a href="#" onclick="alert_logout()" class="nav back"><?=$lang->main->quit?></a></li>
+		</ul>
+	</div>
+</div>

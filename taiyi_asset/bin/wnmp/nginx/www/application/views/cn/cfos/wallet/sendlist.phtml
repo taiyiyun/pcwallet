@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?=$lang->main->send?> - <?=$lang->common->taiyi?></title>
+<link href="/css/<?=$l?>/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/home.css" />
+
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/raphael.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="/js/jquery.boxy.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/boxy.css" />
+</head>
+<body>
+<?php include PATH_TPL . '/'. LANG ."/header.tpl.phtml" ?>
+<div id="main">
+	<div class="my_wallet my_add clearfix">
+		<h2 class="Font18 left">发送清单，请您核对</h2>
+		<div class="Font14 right operate_wallet">
+			<a href="/cfos_wallet/sendlist?wallet=<?=$tWallet?>&clear=1">清空</a>
+			<a href="/cfos_wallet/sendtoaddress?wallet=<?=$tWallet?>">返回添加</a>
+		</div>
+	</div>
+	<div class="wallet wallet_tabel clearfix">
+		<table cellpadding="0" cellspacing="0" class="Font14 add_tabel">
+			<thead>
+				<tr>
+					<th>标签</th>
+					<th>账户</th>
+					<th>发送地址</th>
+					<th>接收地址</th>
+					<th>金额</th>
+				</tr>
+			</thead>
+			<tbody id='tBody'>
+			</tbody>
+		</table>
+	</div>
+	<div class="my_wallet my_add clearfix">
+		<p style="text-align:center;">
+		<input style="width:305px; text-align:center; height:50px; line-height:50px; border-radius:5px; background:#29a8e1; padding:0; font-size:18px; color:#fff; border:0;" 
+		type="button" name='next' class="btn_send center" value="确认并发送" />
+		</p>
+	</div>
+	
+</div>
+<?php include PATH_TPL . '/'. LANG ."/cfos/wallet/wallet.footer.tpl.phtml" ?>
+<?php include PATH_TPL . '/'. LANG ."/footer.tpl.phtml" ?>
+</body>
+</html>
+<script>
+$(function(){
+	getlistsend();
+	$('input[name="next"]').click(function(){
+		var data = $('#sendform').serialize();                                    
+		$(this).after('<img src="/images/loading02.gif">');
+		$('.btn_send').attr('disabled','true');
+		$d = new Date();
+		var curTime = $d.getDate().toString()+$d.getHours().toString()+$d.getMinutes().toString()+$d.getSeconds().toString();
+		$.getJSON('/cfos_wallet/sendtoaddress?wallet=<?=$tWallet?>&sent=1&label='+curTime, function(obj){
+			
+			if(obj.status == 1){
+				js_alert(obj.msg , '/cfos_wallet/listtransactions?wallet=<?=$tWallet?>');
+			}else{
+				js_alert(obj.msg);
+			}
+			$('.btn_send').next('img').remove();
+			$('.btn_send').removeAttr('disabled');
+		});  
+
+	});
+})
+function  getlistsend(){
+	$('#tBody').html('<img src="/images/loading02.gif">');
+	$.getJSON('/cfos_wallet/sendlist?wallet=<?=$tWallet?>&backdata=ajax'+'&stamp='+Math.random(),function(obj){
+		if(obj.status == 0){
+			$('#tBody').html(obj.msg);
+			$('.btn_send').hide();
+		}else{
+			var str = '';
+			$.each(obj.data , function($tkey, tRow){
+				str += '<tr align="center">\
+				<td>'+tRow.label+'</td>\
+				<td>'+tRow.account+'</td>\
+				<td>'+tRow.payaddress+'</td>\
+				<td>'+tRow.address+'</td>\
+				<td>'+tRow.amount+'</td>\
+				</tr>';
+			});
+			$('#tBody').html(str);
+			$('.btn_send').show();
+		}
+	});		
+}
+</script>

@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?=$lang->common->receive?> - <?=$lang->common->taiyi?></title>
+<link href="/css/<?=$l?>/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/home.css" />
+
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/raphael.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="/js/ZeroClipboard.js"></script>
+</head>
+
+<body>
+<?php include PATH_TPL . '/'. LANG ."/header.tpl.phtml" ?>
+<div id="main">
+	<?php include PATH_TPL . '/'. LANG ."/cfos/wallet/wallet.header.tpl.phtml" ?>	
+	<!-- 接收开始 -->
+	<div class="my_wallet my_add clearfix">
+		<h2 class="Font18 left"><?=$lang->common->receive?></h2>
+		<div class="Font14 right operate_wallet">
+			<a href="/cfos_wallet/listreceivedbyaddressadd?wallet=<?=$tWallet?>" class="plus"><?=$lang->wallet->new_receiving_address?></a>
+		</div>
+	</div>
+	<div class="wallet wallet_tabel clearfix">
+		<table cellpadding="0" cellspacing="0" class="Font14 add_tabel">
+			<thead>
+				<tr>
+					<th><?=$lang->wallet->address_label?></th>
+					<th><?=$lang->wallet->address?></th>
+					<th><?=$lang->my_wallet->balance?></th>
+					<th><?=$lang->common->action?></th>
+				</tr>
+			</thead>
+
+			<tbody id='tBody'>
+			</tbody>
+		</table>
+	</div>
+	<!-- 接收结束 -->
+</div>
+<?php include PATH_TPL . '/'. LANG ."/cfos/wallet/wallet.footer.tpl.phtml" ?>
+<?php include PATH_TPL . '/'. LANG ."/footer.tpl.phtml" ?>
+</body>
+</html>
+<script>
+$(function(){
+	getlistreceivedbyaddress();
+
+	waitinglist = true;
+	window.setInterval(function(){
+		if(waitinglist){
+			getlistreceivedbyaddress();
+		}
+	},1000 );
+})
+function  getlistreceivedbyaddress(){
+	$('#tBody').html('<img src="/images/loading02.gif">');
+	$.getJSON('/cfos_wallet/listreceivedbyaddress?wallet=<?=$tWallet?>&backdata=ajax'+'&stamp='+Math.random(),function(obj){
+		waitinglist = false;
+		if(obj.status == 0){
+			$('#tBody').html(obj.msg);
+		}else if(obj.status == '-1'){
+			walletpassphrase('<?=$tWallet?>');
+		}else if(obj.status == '-102'){
+			js_alert('<?=$lang->wallet->message14?>');	
+		}else{
+			var str = '';
+			$.each(obj.data , function(key,tRow){
+				str += '<tr align="center"><td>'+tRow.account+'</td><td>'+tRow.address+'</td><td>'+tRow.balance+'</td><td><a href="/cfos_wallet/listreceivedbyaddressedit?wallet=<?=$tWallet?>&account='+tRow.account+'&address='+tRow.address+'" class="modify"><?=$lang->common->change?></a>&nbsp;&nbsp;<a href="#" class="copyit modify" data="'+tRow.address+'"><?=$lang->common->copy?></a></td></tr>';
+			
+			});
+			$('#tBody').html(str);
+			copyThis();
+		}
+	});		
+}
+function js_alert(msg,url){
+
+	 Boxy.ask(msg, ["<?=$lang->common->yes?>"], function(val) { 
+		if(url != null){
+			location.href=url;	
+		} 
+	}, {title: "<?=$lang->main->message?>"});
+}
+</script>

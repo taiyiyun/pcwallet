@@ -1,0 +1,128 @@
+<div id="footer">
+	<p>
+		<a href="http://www.taiyilabs.com/" target="_blank"><?=$lang->main->taiyi_site?></a>
+	</p>
+	<p>Copyright 2015-2016 太一 All Rights Reserved. Powered by 北京太一云科技有限公司</p>
+</div>
+
+<script type="text/javascript" src="/js/jquery.boxy.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/boxy.css" />
+<script>
+$(function(){
+	setTimeout("message()",30000);
+	setTimeout("cfos_message()",40000);
+})
+function synchronous(){
+	$.get('/walletadd/synchronous?stamp='+Math.random());	
+}
+function message(){
+	$.getJSON('/message/checknewmessage?stamp='+Math.random(),function(data){
+		if(data.data.messagecount == 0){
+			$('#messagecount').css('display','none');
+		}else{
+			$('#messagecount').css('display','block');
+		}	
+		$('#messagecount').html(data.data.messagecount);		
+	});
+	setTimeout("message()",60000);    		
+}
+function cfos_message(){
+	$.getJSON('/message/cfos_checknewmessage?stamp='+Math.random(),function(data){
+		if(data.data.messagecount == 0 || data.status==0){
+			$('#messagecount').css('display','none');
+		}else{
+			$('#messagecount').css('display','block');
+		}	
+		$('#messagecount').html(data.data.messagecount);		
+	});
+	setTimeout("cfos_message()",70000);    		
+}
+
+function alert_logout(){
+		
+	Boxy.ask('<?=$lang->quit->message1?>', ["<?=$lang->common->yes?>","<?=$lang->common->no?>"], function(val) { 
+	
+		if(val == '<?=$lang->common->yes?>'){
+			Boxy.load('/index/logout?stamp='+Math.random(),{modal:true});
+		}
+
+	});
+}
+
+function logout(){
+	
+$.get('/taiyiservice/stop?stamp='+Math.random(),function(){
+	
+	if(isFirefox=navigator.userAgent.indexOf("Firefox")>0){  
+		$('.logout-content').html('<p style="text-align:center"><img src="/images/finish_close.gif"></p><?=$lang->quit->message4?>');
+		$.get('/TaiyiService/nginxstop?stamp='+Math.random());		
+	}else if(isFirefox=navigator.userAgent.indexOf("Chrome")>0){
+		$('.logout-content').html('<p style="text-align:center"><img src="/images/finish_close.gif"></p><?=$lang->quit->message4?>');
+		$.get('/TaiyiService/nginxstop?stamp='+Math.random());		
+	}else{
+		$.get('/TaiyiService/nginxstop?stamp='+Math.random());		
+		window.open('','_parent','');
+		window.close();
+	}	
+
+	
+});
+}
+
+function walletpassphrase(tWallet){
+		
+		Boxy.load('/wallet/walletpassphrase?stamp='+Math.random()+'&wallet='+tWallet,{modal:true});
+
+}
+function copyThis() {
+	if($.browser.version==6.0){
+	//针对ie6
+		$('.copyit').bind("click",function(){
+	  		var code=$(this).attr('data');
+			window.clipboardData.setData("Text",code);
+			js_alert('<?=$lang->wallet->message15?>'+code);
+	  	})
+	   return;
+	}
+	clip = new ZeroClipboard.Client();
+	$('.copyit').mouseover( function() {
+	 	var code=$(this).attr('data');
+	  	clip.setText(code);
+	  	if (clip.div) {//已创建过包含flash的父层div,则鼠标hover时重新定位flash层的位置
+		 	clip.reposition(this);
+	  	}else{
+			clip.glue(this)
+		};
+	});
+	clip.addEventListener( 'complete', function(client, text){
+		js_alert('<?=$lang->wallet->message15?>'+text);
+	});
+}
+function walletstatus(wallet){
+	var alerthtml = $('.boxy-content').html();
+	if(alerthtml == undefined && wallet != ''){
+		$.getJSON('/taiyiservice/wallet?act=status&wallet='+wallet+'&stamp='+Math.random(),function(data){
+			if(data.data == 'unknown stop.'){
+
+				$.getJSON('/mywallet/walletname?wallet='+wallet+'&stamp='+Math.random(),function(walletinfo){
+				Boxy.ask(walletinfo.data.name + '<?=$lang->mywallet->message3?>', ["<?=$lang->common->yes?>"], function(val) { 
+					if(val == '<?=$lang->common->yes?>'){
+						$.getJSON('/taiyiservice/wallet?act=load&wallet='+wallet+'&stamp='+Math.random(),function(){
+							location.reload();
+						});
+					}
+				});
+				});
+			}
+		});
+	}	
+}
+</script>
+<!--<div style="display:none;"><script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F32e8ee2cae110537bb10478d7e449aef' type='text/javascript'%3E%3C/script%3E"));
+</script>
+</div>
+-->
+

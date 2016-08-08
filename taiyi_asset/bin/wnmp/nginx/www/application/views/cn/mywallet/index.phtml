@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Pragma"   content="no-cache">    
+<meta http-equiv="Cache-Control" content="no-cache">    
+<meta http-equiv="Expires" content="0">
+<title><?=$lang->main->my_wallet?> - <?=$lang->common->taiyi?></title>
+<link href="css/<?=$l?>/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="css/<?=$l?>/home.css?data=0205" />
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/raphael.js"></script>
+<script type="text/javascript" src="js/tab.js"></script>
+
+<style type="text/css">
+.box,.box_tb{
+	background: url(images/investjd.png);
+	width:120px;
+	height:120px;
+	margin:0 auto;
+}
+</style>
+</head>
+
+<body>
+<?php include PATH_TPL . '/'. LANG ."/header.tpl.phtml" ?>	
+<div id="main">
+	<div class="my_wallet clearfix">
+		<h2 class="Font18 left"><?=$lang->main->my_wallet?></h2>
+		<div class="Font14 right operate_wallet">
+			<a href="/walletedit" class="redact"><?=$lang->main->manage_wallet?></a>
+			<a href="/walletadd" class="plus"  class="selectTag"><?=$lang->common->add?></a>
+		</div>
+	</div>
+	<div class="coin_all">
+		<div id=tagContent>
+	<!---内容开始-->
+	<div class="tagContent" id="tagContent1" >
+	<!--资产-->
+	<div class="wallet clearfix" id='wallet'>
+		<?
+		if(count($tCfosMywallet)){
+		$tWalletlist = array();
+		foreach($tCfosMywallet as $tKey => $tRow){$tWalletlist[] = $tRow['mark'];$tBeta='';if($tRow['beta'] == 1){$tBeta = '<p class="beta"></p>';}?>
+			<?if($tRow['status'] == 3){?>
+				<div class="my_coin left coin_div" sync='true' balance_temp='0' status='<?=$tRow['status']?>' wallet='<?=$tRow['mark']?>' reindex='<?=$twallet_reindex?>' cfos='1' onecfos='<?if($tKey==0){echo '1';}else{echo '0';}?>'>
+						<div class="clearfix coin_img">
+							<div class="left"><img src="<?=$tRow['small_img']?>" /></div>
+							<?if($l == 'en'){if($tRow['en_name'] == 'ybcoin'){$tRow['en_name'] = 'YBC';}?>
+							<h1 class="Font20 left"><?=ucfirst($tRow['en_name'])?></h1>
+							<?}else{?>
+							<h1 class="Font20 left"><?=$tRow['name']?></h1>
+							<?}?>
+							<?=$tBeta?>
+						</div>
+						<div style='display:block' class="bill-goods-list blocks block_<?=$tRow['mark']?> o_blocks" data='<?=$tRow['mark']?>' cfos='1' onecfos='<?if($tKey==0){echo '1';}else{echo '0';}?>'>
+								<div id='box_tb_<?=$tRow['mark']?>' class='box_tb' style='position:relative' num='0' size='0'>
+								</div>
+								<div style='position:absolute;top:55px' class='cont' numblock='0' numheight='0' >
+									<div class="process-num Font30" id='<?=$tRow['mark']?>_percent'>0%</div>
+									<p class="process_state Font14" id='<?=$tRow['mark']?>_status'><?=$lang->my_wallet->blockchain_synchronizing?>...</p>
+									<p class="process_plan  Font12"></p>
+								</div>
+						</div>
+
+						<div style='display:none' class="coin_number coin_show Font14 coin_number_<?=$tRow['mark']?> o_coin" data='<?=$tRow['mark']?>'>
+						</div>
+
+				</div>
+			<?}?>
+			<?}?>
+		<?}else{?>
+		<div class="no_con">
+			<p><?=$lang->manage_wallet->message4?></p>
+<p><a href="/walletadd?cfos=1" class="plus"><?=$lang->manage_wallet->add_a_asset?></a></p>
+<p style="font-size:14px; color:#888; margin-bottom:5px;"><?=$lang->manage_wallet->message2?></p>
+<p style="font-size:14px; color:#888;"><?=$lang->manage_wallet->message3?></p>
+		</div>
+		<?}?>
+	</div>
+	</div>
+</div>
+</div>
+</div>
+<?php include PATH_TPL . '/'. LANG ."/footer.tpl.phtml" ?>	
+</body>
+</html>
+<script>
+$(function(){
+	$('#wallet > .my_coin').each(function(tkey , tobj){
+		var tWallet = $(tobj).attr('wallet');	
+		walletdata($(tobj),tWallet);
+	})
+
+//wait for cfos sync until cfos is fine.	
+	window.setInterval(function(){
+		$('#wallet > .my_coin').each(function(tKey,tobj){		
+			var status = $(tobj).children('.blocks').css('display');
+			if(status == 'block'){
+				var tWallet = $(tobj).attr('wallet');
+				walletdata($(tobj),tWallet);				
+			}
+		});
+	},5000);
+})
+
+function walletdata(tobj,tWallet){
+	var tCfos = $(tobj).attr('cfos'); 	
+	var tOnecfos = $(tobj).attr('onecfos'); 	
+	var tCfosstr = '';
+	var sync = $(tobj).attr('sync');
+	if(tCfos == 1){tCfosstr = 'cfos_';}
+
+	//show loading image as init .
+	$(tobj).children('.coin_number').html('<p class="again_connection" data="'+tWallet+'" cfos="'+tCfos+'" runtime="0" starttime="'+new Date().getTime()+'"><img src="/images/loading.gif" class="loading01"/></p>');
+
+	//default sync = true; check balance
+	if(sync=='true'){
+		$.getJSON('/'+tCfosstr+'mywallet/balance?wallet='+tWallet+'&stamp='+Math.random(),function(bobj){
+			if(bobj.status == 0){
+				show_wallet($(tobj),tWallet,bobj.data);
+				$(tobj).attr('balance_temp', '0');
+				return;
+			}
+			if(bobj.status == 3){
+				$(tobj).attr('balance_temp', '3');
+			}
+			$(tobj).attr('sync', 'false');
+			//if balance failed, check sync
+			$.getJSON('/'+tCfosstr+'mywallet/cfossyncinfo?wallet='+tWallet+'&stamp='+Math.random(),function(cobj){
+				if(cobj.status == 0){
+					var percent = cobj.data.percent;
+					var isremote = cobj.data.isremote;
+					if(percent>=100){
+						if(isremote == 1){
+							if(bobj.status == 3){
+								show_wallet($(tobj),tWallet,0);
+							}
+							else{
+								show_block($(tobj),tWallet,99,isremote);
+								$(tobj).attr('sync', 'true');
+							}
+						}else{
+							show_block($(tobj),tWallet,99,isremote);
+						}
+					}else{
+						show_block($(tobj),tWallet,percent,isremote);
+					}
+				}	
+			});
+		});
+	}
+	else{
+		//if balance failed, check sync
+		$.getJSON('/'+tCfosstr+'mywallet/cfossyncinfo?wallet='+tWallet+'&stamp='+Math.random(),function(cobj){
+			if(cobj.status == 0){
+				var percent = cobj.data.percent;
+				var isremote = cobj.data.isremote;
+				if(percent>=100){
+					if(isremote == 1){
+						var balance_temp = $(tobj).attr('balance_temp');
+						if(balance_temp == 3){
+							show_wallet($(tobj),tWallet,0);
+						}
+						else{
+							show_block($(tobj),tWallet,99,isremote);
+							$(tobj).attr('sync', 'true');
+						}
+					}else{
+						show_block($(tobj),tWallet,99,isremote);
+					}
+				}else{
+					show_block($(tobj),tWallet,percent,isremote);
+				}
+			}	
+		});
+	}
+}
+
+function show_wallet(tobj,tWallet,balance){
+	$(tobj).attr('sync', 'true');
+	var str = "<p class='Font16'><?=$lang->my_wallet->balance?></p> <p class='my_money Font20'>"+balance+"</p>";
+	str += "<a href='javascript:enter(\""+tWallet+"\")' class=\"plus_btn Font16\"><?=$lang->my_wallet->enter?></a>";	
+	$(tobj).children('.coin_number').html(str);
+	$(tobj).children('.blocks').css('display','none');
+	$(tobj).children('.coin_number').css('display','block');
+}
+function show_block(tobj,tWallet,percent,isremote){
+	$(tobj).attr('sync', 'false');
+	if(isremote == 1)
+		$(tobj).children('.blocks').children('.cont').children('.process_state').html('网络同步中...');
+	else
+		$(tobj).children('.blocks').children('.cont').children('.process_state').html('本地加载中...');
+	$(tobj).children('.blocks').children('.cont').children('.process-num').html(percent+'%');
+	add_block(percent ,tWallet);
+	$(tobj).children('.blocks').css('display','block');
+	$(tobj).children('.coin_number').css('display','none');
+}
+function add_block(args,wallet){
+	var object = document.getElementById('box_tb_'+wallet);
+	var num = parseInt($('#box_tb_'+wallet).attr('num'));
+	function loadImg (data,wallet){
+		i = (data-1);
+		if(i<0) i = 0;
+		var imgLeft = -(i*120+(i*30))+'px'
+		object.style.backgroundPosition = imgLeft+'\t'+'0px'
+		$('#box_tb_'+wallet).next().children('div').html((data)+'%');
+	}
+	if(args+num <= 100){
+		loadImg(args+num,wallet);
+	}
+	$('#box_tb_'+wallet).attr('num' , num);
+}
+
+
+function enter(pWallet){
+	$.getJSON('/cfos_wallet/isavailable?wallet='+pWallet+'&stamp='+Math.random(),function(tobj){
+		if(tobj.status==1){
+			Boxy.ask('此币暂时不可用，抱歉。', ["确定"], function(val) { 
+				
+			});
+		}
+		if(tobj.status==0){
+			location.href = '/cfos_wallet/listtransactions?wallet='+pWallet;
+		}
+	});
+}
+</script>
+

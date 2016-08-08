@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?=$lang->main->add_a_coin?> - <?=$lang->common->taiyi?></title>
+<link href="/css/<?=$l?>/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/home.css" />
+<script src='js/jquery.js'></script>
+<script src='js/tab.js'></script>
+<script src='js/app/init.js'></script>
+<script src='js/app/walletadd.js'></script>
+</head>
+
+<body>
+<?php include PATH_TPL . '/'. LANG ."/header.tpl.phtml" ?>
+<div id="main">
+	<div class="my_wallet clearfix">
+		<h2 class="Font18 left plus"><?=$lang->common->add?></h2>
+		<div class="Font14 right operate_wallet">
+			<a href="/mywallet" ><?=$lang->manage_wallet->back_to_my_wallet?></a>
+		</div>
+	</div>
+	<div class="coin_all">
+	<div class="wallet clearfix" id='tagContent'>
+	</div>
+	</div>
+</div>
+<?php include PATH_TPL . '/'. LANG ."/footer.tpl.phtml" ?>
+</body>
+</html>
+<script>
+//同步服务器
+function synchronous(){
+	$('.wallet').html('<img src=\'/images/loading.gif\' class="loading01">');;
+	$.getJSON('/walletadd/synchronous?stamp='+Math.random(),function(obj){
+		if(obj.data == ''){
+			//$('.wallet').html('	<div class="no_con"><p>没有新币发布</p></div>');				
+		}else{
+			//$('.wallet').html(obj.data);
+		}
+	});		
+}
+
+$(function(){
+	
+	//synchronous();
+	search();
+	window.setInterval(function(){
+		if($('.loading01').attr('issearching')=="true"){
+			search();
+		}
+	},2000);
+	
+	window.setInterval(function(){
+		$('.loading01').each(function(tKey,tobj){
+				var starttime = $(tobj).attr('starttime');			
+				var time = new Date().getTime();
+				if((time-starttime) > (20*1000)){
+					$.get('/index/init',function(){
+						location.href='/walletadd';	
+					});					
+				}		
+			});
+	}, 3000);
+
+})
+function search(){
+		$('.wallet').html('<img src=\'/images/loading.gif\'  class="loading01" issearching="true" starttime="'+new Date().getTime()+'">');		
+		$.getJSON('/walletadd/searchlocal?stamp='+Math.random()+'&cfos=<?=$tCfos?>',function(obj){
+			$('.loading01').attr('issearching', "false");
+			if(obj.data == ''){
+				$('.wallet').html('	<div class="no_con"><p><?=$lang->add_a_coin->no_new_coin?></p></div>');				
+			}else{
+				$('.wallet').html(obj.data);
+			}
+		});
+}
+</script>

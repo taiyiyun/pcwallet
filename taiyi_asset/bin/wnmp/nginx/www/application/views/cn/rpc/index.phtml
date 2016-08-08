@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>太一</title>
+<link href="css/<?=$l?>/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="css/<?=$l?>/home.css" />
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/raphael.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+</head>
+
+<body>
+
+<?php include PATH_TPL . '/'. LANG ."/header.tpl.phtml" ?>	
+<div id="main">
+
+	<?php include PATH_TPL . '/'. LANG ."/wallet/wallet.header.tpl.phtml" ?>	
+
+<!-- RPC控制台 开始 -->
+	<div class="my_wallet my_add clearfix">
+		<h2 class="Font18 left">RPC控制台</h2>
+		<ul class="Font14 right">
+			<!--展开后加class名为about_open-->
+<!--			<li><a href="javascript:about()" class="about_btn about_open" >关于</a></li>-->
+			<li><a href="/wallet/more?wallet=<?=$tWallet?>">返回更多操作</a></li>
+		</ul>
+	</div>
+	<div class="wallet wallet_tabel clearfix">
+		<ul class="about clearfix Font14" id='info' style='display:none'>
+			<li>
+				<h3>版本信息</h3>
+				<p><span>创建日期</span>&nbsp;</p>
+				<p><span>用户版本</span><?=$tWalletinfo['version']?></p>
+			</li>
+			<li>
+				<h3>网络信息</h3>
+				<p><span>连接数</span><?=$tPeercount?></p>
+				<p><span>是否是测试网络</span><?if(empty($tWalletinfo['testnet'])){echo '否';}else{echo '是';}?></p>
+			</li>
+			<li class="about_end">
+				<h3>区块链</h3>
+				<p><span>当前区块数</span><?=$tBlock?></p>
+				<p><span>预计区块总数</span><?=$tPeerheight?></p>
+				<p><span>上一区块时间</span></p>
+			</li>
+		</ul>
+			<ul class="coin_money console">
+				<li><label>console</label><input type="text" class="left" name="command" /><a href="javascript:clean()" class="right screen Font14">清屏</a></li>
+			</ul>
+		<div class="" id='print'>
+		</div>
+	</div>
+	</div>
+	<!-- RPC控制台 结束 -->
+
+</div>
+<?php include PATH_TPL . '/'. LANG ."/wallet/wallet.footer.tpl.phtml" ?>
+<?php include PATH_TPL . '/'. LANG ."/footer.tpl.phtml" ?>
+<script>
+$(function(){
+	$('input[name="command"]').keydown(function(event){
+		var keycode = event.which;
+		if(keycode == 13){
+			var command = $('input[name="command"]').val();
+			$.get('/rpc/get?wallet=<?=$tWallet?>&command='+command,function(data){
+				$("#print").prepend(data); 
+			});
+		}
+	});	
+})
+function clean(){
+	$('#print').html('');		
+}
+function about(){
+	var display = $('#info').css('display');
+	if(display == 'block'){
+
+		$('.about_btn').addClass('about_open');
+		$('#info').css('display','none');
+	}else{
+		$('.about_btn').removeClass('about_open');
+		$('#info').css('display','block');
+	}
+}
+</script>
+</body>
+</html>

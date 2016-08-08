@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?=$lang->common->taiyi?></title>
+<link href="css/<?=$l?>/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/home.css" />
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script>
+function lang(l){
+	$.getJSON('/system/lang?l='+l+'&stamp='+Math.random(),function(data){
+		if(data.status == 1){
+			location.href='/'+'?stamp='+Math.random();	
+		}	
+	});		
+}
+</script>
+<style>
+<?if($l == 'en'){?>
+.loading_logo {
+  background: url("/images/loading_logo_en.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+<?}?>
+</style>
+</head>
+
+<body style="background:url(/images/loading_bg.jpg) 50% top no-repeat;">
+<div class="loading">
+	<div class="taiyi">
+		<p class="loading_logo"></p>
+		<p><a href="/mywallet" class="enter Font24">
+		<?if($l =='en'){?>
+		<img src="/images/language02.png" />
+		<?}else{?>
+		<img src="/images/language01.png" />
+		<?}?></a></p>
+		<p class="language clearfix"><a href="javascript:lang('cn')" class="chinese <?if($l == 'cn'){?>current<?}?>">中文版</a>|<a href="javascript:lang('en')" class="english <?if($l == 'en'){?>current<?}?>">English</a></p>
+	</div>
+
+</div>
+<div style="display:none;"><script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F32e8ee2cae110537bb10478d7e449aef' type='text/javascript'%3E%3C/script%3E"));
+</script>
+</div>
+</body>
+</html>

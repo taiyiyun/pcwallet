@@ -1,0 +1,17 @@
+	<div class="buy clearfix">
+		<div class="receive left <?if(!empty($tAct) && $tAct == 'listreceivedbyaddress'){?>current<?}?>">
+			<p><img src="/images/wallet.png" /></p>
+			<p><a href="/cfos_wallet/listreceivedbyaddress?wallet=<?=$tWallet?>"><?=$lang->common->receive?></a></p>
+		</div>
+		<div class="present <?if(!empty($tAct) && $tAct == 'more'){?>current<?}?>">
+			<p class="Font50" id='balance' style='hegiht:67px;'></p>
+			<p class="present_border Font14"><span class='wallet_name'></span><?=$lang->my_wallet->balance?></p>
+			<p class="notyet Font14"><?=$lang->my_wallet->unconfirmed_transactions?>：<span class='unconfirmed'>0</span>&nbsp;&nbsp;&nbsp;&nbsp;<?=$lang->my_wallet->immature_transactions?>：<span class='newmint'>0</span></p>
+			<p><a href="/cfos_wallet/more?wallet=<?=$tWallet?>"><?=$lang->wallet->more_options?></a></p>
+		</div>
+		<div class="receive right <?if(!empty($tAct) && $tAct == 'sendtoaddress'){?>current<?}?>">
+			<p><img src="/images/send.png" /></p>
+			<p><a href="/cfos_wallet/sendtoaddress?wallet=<?=$tWallet?>"><?=$lang->main->send?></a></p>
+		</div>
+	</div>
+

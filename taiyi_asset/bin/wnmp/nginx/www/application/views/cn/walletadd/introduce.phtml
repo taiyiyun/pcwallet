@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+<?if($l == 'en'){?>
+	<?=$tGetwallet['en_name']?>
+<?}else{?>
+	<?=$tGetwallet['name']?>
+<?}?>
+</title>
+<link href="/css/<?=$l?>/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/home.css" />
+
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/raphael.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+</head>
+
+<body>
+
+<?php include PATH_TPL . '/'. LANG ."/header.tpl.phtml" ?>
+<div id="main">
+	<!-- 货币介绍 开始 -->
+	<div class="clearfix">
+		<div class="product left">
+			<p><img src="<?=$tGetwallet['img']?>" /></p>
+			<?if(count($tWalletinfo) > 1){?>
+			<p><a href="/<?if($tGetwallet['cfos'] == 1){echo 'cfos_';}?>wallet/listtransactions?wallet=<?=$tGetwallet['mark']?>" class="plus_btn"><?=$lang->common->enter?></a></p>
+			<?}else{?>
+			<p><a href="javascript:add('<?=$tGetwallet['mark']?>','<?=$tGetwallet['cfos']?>')" class="plus_btn"><?=$lang->walletadd->add?></a></p>
+			<?}?>
+			<p><?=$lang->manage_wallet->edition?>：<?=$tGetwallet['version']?></p>
+			<p><?=$lang->walletadd->wallet_size?>：<?=$tGetwallet['filesize']?></p>
+			<p><?=$lang->walletadd->block_occupied_space_estimated?>：<?=$tGetwallet['block_size']?></p>
+		</div>
+		<div class="product_right">
+			<div class="clearfix product_title">
+				<h1 class="Font24 left">
+				<?if($l == 'en'){?>
+				<?=$tGetwallet['en_name']?>
+				<?}else{?>
+				<?=$tGetwallet['name']?>
+				<?}?>
+				</h1>
+				<p class="Font14 right"><a href="/walletadd"><?=$lang->common->back?></a></p>
+			</div>
+			<div class="coin_word Font14">
+				<?if($l == 'en'){?>
+				<p ><?=htmlspecialchars_decode(stripslashes($tGetwallet['en_introduce']),ENT_QUOTES)?></p>
+				<?}else{?>
+				<p ><?=htmlspecialchars_decode(stripslashes($tGetwallet['introduce']),ENT_QUOTES)?></p>
+				<?}?>
+			</div>
+		</div>
+	</div>
+	<!-- 货币介绍 结束 -->
+</div>
+<?php include PATH_TPL . '/'. LANG ."/footer.tpl.phtml" ?>
+</body>
+</html>
+<script>
+function add(pWallet,cfos){
+	$.getJSON('/walletadd/add?wallet='+pWallet+'&stamp='+Math.random(),function(obj){
+		location.href = '/mywallet?cfos='+cfos;
+	});		
+}
+</script>

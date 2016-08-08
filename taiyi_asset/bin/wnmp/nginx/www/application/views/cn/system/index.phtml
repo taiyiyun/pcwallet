@@ -1,0 +1,364 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?=$lang->main->settings?> - <?=$lang->common->taiyi?></title>
+<link href="/css/<?=$l?>/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/home.css" />
+
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/raphael.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="/js/jquery.boxy.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/boxy.css" />
+</head>
+
+<body style='min-width:1000px;'>
+
+<?php include PATH_TPL . '/'. LANG ."/header.tpl.phtml" ?>	
+<div id="main">
+	<!-- 设置 开始 -->
+	<div class="my_wallet my_add clearfix">
+		<h2 class="Font18 left"><?=$lang->main->settings?></h2>
+		<label class='Font14 right'><?=$lang->setting_page->taiyi_edition?>：<?=$tVersion?></label>
+	</div>
+	<div class="account">
+		<div class="my_information">
+			<div class="shezhi clearfix Font14"><h4 class="Font16 left real01"><?=$lang->setting_page->wallet_encryption?></h4><a href="#" class="right"><?=$lang->main->settings?></a></div>
+			<form id='encrypt' onkeydown="if(event.keyCode==13)return false;">
+				<ul class="login Font14">
+					<?if(count($tWalletrunpasswd['nopasswd'])){?>
+					<li style="margin-bottom:0;"><label class="tibi_l"><?=$this->lang->common->coin?></label><input type="checkbox" class="choice" name='cb_wallet' onclick='selwalletall("encrypt")'/>&nbsp;<?=$lang->common->all?></li>
+					<li style="margin-bottom:10px;"><label class="tibi_l"></label>
+					<?php foreach($tWalletrunpasswd['nopasswd'] as $tRow){?>	
+						<input type='checkbox' name='wallets[]' value='<?=$tRow['mark']?>' class="choice"/>&nbsp;<?if($l == 'en'){?><?=$tRow['en_name']?><?}else{?><?=$tRow['name']?><?}?>								
+					<?}?>
+					<?}else{?>
+						<li style="margin-bottom:0;"><label class="tibi_l"><?=$this->lang->common->coin?></label><?=$this->lang->system->message9?></li>
+					<?}?>
+
+					</li>
+
+					<li><label class="tibi_l"><?=$lang->setting_page->wallet_password?></label><input type="password" name='password' class='left' /><p class='tishi left'><span class="Font14 tishi"><?=$lang->setting_page->message1?></span></p></li>
+					<li><label class="tibi_l"><?=$lang->setting_page->repeat?></label><input type="password" name='repeatpassword' /></li>
+					<li><label class="tibi_l">&nbsp;</label><input type="button" class="encrypt_submit btn_submit" name='mysubmit' value="<?=$lang->system->confirm?>" style="width:285px; height:42px;" /></li>
+				</ul>
+			</form>
+		</div>
+		<div class="my_information" >
+			<div class="shezhi clearfix Font14"><h4 class="Font16 left real01"><?=$lang->setting_page->change_wallet_password?></h4><a href="#" class="right"><?=$lang->main->settings?></a></div>
+			<form id='passphrasechange' onkeydown="if(event.keycode==13)return false;">
+				<ul class="login Font14">
+
+					<?if(count($tWalletrunpasswd['passwd'])){?>
+					<li style="margin-bottom:0;"><label class="tibi_l"><?=$this->lang->common->coin?></label><input type="checkbox" class="choice" name='cb_wallet' onclick='selwalletall("passphrasechange")'/>&nbsp;<?=$lang->common->all?></li>
+					<li style="margin-bottom:10px;"><label class="tibi_l"></label>
+
+					<?php foreach($tWalletrunpasswd['passwd'] as $tRow){?>	
+						<input type='checkbox' name='wallets[]' value='<?=$tRow['mark']?>' class="choice"/>&nbsp;<?if($l == 'en'){?><?=$tRow['en_name']?><?}else{?><?=$tRow['name']?><?}?>								
+					<?}?>
+					<?}else{?>
+						<li style="margin-bottom:0;"><label class="tibi_l"><?=$this->lang->common->coin?></label><?=$this->lang->system->message9?></li>
+					<?}?>
+					</li>
+					<li><label class="tibi_l"><?=$lang->system->current_wallet_password?></label><input type="password" name='oldpassword' /></li>
+					<li><label class="tibi_l"><?=$lang->system->new_wallet_password?></label><input type="password" name='password' class='left' /><p class='left tishi'><span class="Font14"><?=$lang->setting_page->message1?></span></p></li>
+					<li><label class="tibi_l"><?=$lang->setting_page->repeat?></label><input type="password" name='repeatpassword' /></li>
+					<li><label class="tibi_l">&nbsp;</label><input type="button" class="btn_submit passphrasechange_submit" name='mysubmit' value="<?=$lang->setting_page->confirm?>" style="width:285px; height:42px;" /></li>
+				</ul>
+			</form>
+		</div>
+
+		<?php if(count($tPosstatus)){?>
+		<div class="my_information" >
+			<div class="shezhi clearfix Font14"><h4 class="Font16 left real04"><?=$lang->system->manage_pos?></h4><a href="#" class="right"><?=$lang->main->settings?></a></div>
+
+			<form id='unlock' onkeydown="if(event.keycode==13)return false;">
+			<p class="pos_onoff Font16"><?=$lang->system->pos_status?></p>
+			<div class="on_off">
+
+				<?php if(count($tPosrunlist)){?>
+				<?foreach($tPosrunlist as $tRow){
+					if(empty($tRow['pos'])){continue;}
+					if($l == 'en'){$tRow['name'] = $tRow['en_name'];}
+					if($tRow['cfos']==1){$tRow['mark'] = 'cfos';}
+				?>
+				<p><span><?=$tRow['name']?></span><a href="javascript:pos('<?=$tRow['mark']?>','<?if(in_array($tRow['mark'],$tPosstatus)){?>close<?}else{?>open<?}?>')" class="onoff <?if(in_array($tRow['mark'],$tPosstatus)){?>onoff01<?}?>"></a></p>
+				<?}?>
+				<?}else{?>
+				<p><span><?=$this->lang->common->coin?>&nbsp;&nbsp;&nbsp;&nbsp;</span><?=$this->lang->system->message9?></p>
+				<?}?>
+
+			</div>
+			<p class="pos_onoff Font16"><?=$lang->system->unlock_pos_interest?></p>
+
+				<ul class="login Font14">
+					<?php if(count($tPoslist)){?>
+					<li style="margin-bottom:0;"><label class="tibi_l"><?=$lang->system->unlock_coin?></label><input type="checkbox" class="choice" name='cb_unlokcall' />&nbsp;<?=$lang->common->all?></li>
+					<li style="margin-bottom:10px;"><label class="tibi_l"></label>
+					<?php foreach($tPoslist as $tRow){?>	
+						<input type='checkbox' name='wallets[]' value='<?=$tRow['mark']?>' class="choice" <?if(!empty($tRow['unlock'])){?>checked="checked"<?}?>/>&nbsp;<?if($l == 'en'){?><?=$tRow['en_name']?><?}else{?><?=$tRow['name']?><?}?>								
+					<?}?>
+					<?}else{?>
+						<li style="margin-bottom:0;"><label class="tibi_l"><?=$this->lang->common->coin?></label><?=$this->lang->system->message9?></li>
+					<?}?>
+					</li>
+					<li style="margin-bottom:10px;"><label class="tibi_l"><?=$lang->setting_page->wallet_password?></label><input type="password" name='password'/></li>
+					<li><p class="Font14 pos_rule"><?=$lang->system->message1?></p></li>
+
+					<li style='height:0px; line-height:0px; min-height:0px; _height:0px;'><input type="text" style='overflow:hidden;display:none;width:0px;height:0px;' /></li>
+
+					<li><label class="tibi_l">&nbsp;</label><input type="button" class="btn_submit unlock_submit" name='mysubmit' value="<?=$lang->setting_page->confirm?>" style="width:285px; height:42px;" /></li>
+				</ul>
+			</form>		
+		</div>
+		<?}?>
+
+		<?if(count($tWalletrunpasswd)){?>
+		<!--<div class="my_information">
+			<div class="shezhi clearfix Font14"><h4 class="Font16 left real02"><?=$lang->setting_page->import_wallet?></h4><a href="#" class="right"><?=$lang->main->settings?></a></div>
+			<form id='importprivkey' onkeydown="if(event.keyCode==13)return false;">
+				<ul class="login Font14">
+					<li><label class="tibi_l">货币</label>
+						<select name='wallet' id='importwallet'>
+							<option value='0'>==请选择==</option>
+							<?foreach($tWalletrunpasswd as $tKey => $tRow){
+								 if($tKey == 'nopasswd') $tPwd=0; else $tPwd=1;
+								 foreach($tRow as $tR){
+								?>
+								<option value="<?=$tR['mark']?>" passwd='<?=$tPwd?>'><?=$tR['name']?></option>
+								<?
+								}
+							?>
+							<?php
+							}?>
+						</select>
+					</li>
+					<li><label class="tibi_l"><?=$lang->setting_page->private_key?></label><input type="password" name='privkey' class='left' /><p class='left tishi'><span class="Font14"><?=$lang->setting_page->message7?></span></p></li>
+					<li id='importpasswd' style='display:none'><label class="tibi_l"><?=$lang->common->wallet_password?></label><input type="password" name='password'/></li>
+					<li><label class="tibi_l">&nbsp;</label><input type="button" class="btn_submit importprivkey_submit" value="<?=$lang->setting_page->import?>" style="width:285px; height:42px;" /></li>
+					<input type='hidden' value='0' name='hipasswd' />
+				</ul>
+			</form>
+		</div>
+		-->
+		<?}?>
+		<div class="my_information">
+			<div class="shezhi clearfix Font14"><h4 class="Font16 left real03"><?=$lang->setting_page->wallet_backup?></h4><a href="#" class="right"><?=$lang->main->settings?></a></div>
+			<form id='backupwallet' onkeydown="if(event.keyCode==13)return false;">
+				<ul class="login Font14">
+					<?if(count($tWalletlist)){?>
+					<li style="margin-bottom:0;"><label class="tibi_l"><?=$this->lang->common->coin?></label><input type="checkbox" class="choice" name='cb_wallet' onclick='selwalletall("backupwallet")'/>&nbsp;<?=$lang->common->all?></li>
+					<li style="margin-bottom:10px;"><label class="tibi_l"></label>
+					<?php foreach($tWalletlist as $tRow){?>	
+						<input type='checkbox' name='wallets[]' value='<?=$tRow['mark']?>' class="choice"/>&nbsp;<?if($l == 'en'){?><?=$tRow['en_name']?><?}else{?><?=$tRow['name']?><?}?>								
+					<?}?>
+
+					</li>
+					<?}else{?>
+						<li style="margin-bottom:0;"><label class="tibi_l"><?=$this->lang->common->coin?></label><?=$this->lang->system->message9?></li>
+					<?}?>
+
+					<li><label class="tibi_l"><?=$lang->setting_page->export_address?></label><input type="text" name='exportdir' value='<?=$tExportdir?>' readonly='true' class='left'/><p class='left tishi'><span class="Font14" style='line-height:40px;'><?=$lang->setting_page->message8?></span></p></li>
+					<li><label class="tibi_l">&nbsp;</label><input type="button" class="btn_submit backupwallet_submit" value="<?=$lang->setting_page->export?>" style="width:285px; height:42px;" /></li>
+					<li style="margin-bottom:0;"><label class="tibi_l"><?=$this->lang->system->message10?></label>
+						<?php foreach($tWalletlist as $tRow){?>	
+							<a href='/walletadd/introduce?wallet=<?=$tRow['mark']?>' class='modify'><?if($l == 'en'){?><?=$tRow['en_name']?><?}else{?><?=$tRow['name']?><?}?></a>
+						<?}?>
+					</li>
+				</ul>
+			</form>
+
+		</div>
+	</div>
+	<!-- 设置 结束 -->
+</div>
+<?php include PATH_TPL . '/'. LANG ."/footer.tpl.phtml" ?>	
+</body>
+</html>
+<script>
+$(function(){
+	//$('.btn_submit').click(function(){
+	//	var tData = $('#myform').serialize();		
+	//	$.post('/system/encrypt',tData , function(obj){
+				
+	//	});
+	//});		
+
+	$('#passphrasechange').css('display','none');
+	$('#encrypt').css('display','none');
+	$('#importprivkey').css('display','none');
+	$('#backupwallet').css('display','none');
+	<?if(empty($_GET['tab']) && $_GET['tab'] != 'unlock'){?>
+	$('#unlock').css('display','none');
+	<?}?>
+
+
+	$('.shezhi').click(function(){
+		if(($(this).next().css('display') == 'none')){
+			$(this).next().css('display', 'block');
+			$(this).children('.right').html('<?=$lang->setting_page->cancel?>')
+		}else{
+			$(this).next().css('display', 'none');
+			$(this).children('.right').html('<?=$lang->main->settings?>');
+		}
+	});
+	$('.encrypt_submit').click(function(){
+
+		$('.btn_submit').attr('disabled','true');
+		$(this).after('<img src="/images/loading02.gif">');
+		var tData = $('#encrypt').serialize();		
+		$.post('/system/encrypt',tData , function(obj){
+			var obj = eval('('+obj+')');				
+			if(obj.status == 1){
+				$.get('/system/stopwallet?stamp='+Math.random()+'&walletlist='+obj.data,function(){
+				$.get('/system/startwallet?stamp='+Math.random()+'&walletlist='+obj.data,function(){
+					js_alert(obj.msg , '/system');
+				});
+				});
+			}else{
+				$('.btn_submit').removeAttr('disabled');
+				$('.encrypt_submit').next('img').remove();
+				js_alert(obj.msg);
+			}
+		});
+	});
+	$('.passphrasechange_submit').click(function(){
+		$(this).after('<img src="/images/loading02.gif">');
+		$('.btn_submit').attr('disabled','true');
+		var tData = $('#passphrasechange').serialize();		
+		$.post('/system/passphrasechange',tData , function(obj){
+			var obj = eval('('+obj+')');				
+			if(obj.status == 1){
+				$.get('/system/stopwallet?stamp='+Math.random()+'&walletlist='+obj.data,function(){
+				$.get('/system/startwallet?stamp='+Math.random()+'&walletlist='+obj.data,function(){
+					js_alert(obj.msg , '/system');
+				});
+				});
+			}else{
+				$('.btn_submit').removeAttr('disabled');
+				js_alert(obj.msg);
+				$('.passphrasechange_submit').next('img').remove();
+			}
+		});
+	});
+
+	$('.importprivkey_submit').click(function(){
+
+		$('.btn_submit').attr('disabled','true');
+		$(this).after('<img src="/images/loading02.gif">');
+		var tData = $('#importprivkey').serialize();		
+		$.post('/system/importprivkey',tData , function(obj){
+			var obj = eval('('+obj+')');				
+			if(obj.status == 1){
+				js_alert(obj.msg , '/system');
+			}else{
+				$('.importprivkey_submit').next('img').remove();
+				$('.btn_submit').removeAttr('disabled');
+				js_alert(obj.msg);
+			}
+		});
+	});
+
+	$('.backupwallet_submit').click(function(){
+
+		$('.btn_submit').attr('disabled','true');
+		$(this).after('<img src="/images/loading02.gif">');
+		var tData = $('#backupwallet').serialize();		
+		$.post('/system/backupwallet',tData , function(obj){
+			var obj = eval('('+obj+')');		
+			if(obj.status == 1){
+				js_alert(obj.msg , '/system');
+			}else{
+				$('.btn_submit').removeAttr('disabled');
+				$('.backupwallet_submit').next('img').remove();
+				js_alert(obj.msg);
+			}
+		});
+	});
+	$('.unlock_submit').click(function(){
+
+		$('.btn_submit').attr('disabled','true');
+		$(this).after('<img src="/images/loading02.gif">');
+		var tData = $('#unlock').serialize();		
+		$.post('/system/unlock',tData , function(obj){
+			var obj = eval('('+obj+')');		
+			if(obj.status == 1){
+				js_alert(obj.msg , '/mywallet');
+			}else{
+				$('.btn_submit').removeAttr('disabled');
+				$('.unlock_submit').next('img').remove();
+				js_alert(obj.msg);
+			}
+		});
+	});
+
+	$('input[name="cb_unlokcall"]').click(function(){
+		$('input[name="wallets[]"]').each(function(){
+			var val = $('input[name="cb_unlokcall"]').attr('checked');
+			if(val == 'checked'){
+				$(this).attr('checked','checked');
+			}else{
+				$(this).removeAttr('checked');
+			}
+		});
+	});
+
+	$('input[name="cb_unlokcall"]').click(function(){
+		$('input[name="wallets[]"]').each(function(){
+			var val = $('input[name="cb_unlokcall"]').attr('checked');
+			if(val == 'checked'){
+				$(this).attr('checked','checked');
+			}else{
+				$(this).removeAttr('checked');
+			}
+		});
+	});
+	$('#importwallet').change(function(){
+		var passwdstatus = $(this).find("option:selected").attr('passwd');
+		if(passwdstatus == '1'){
+			$('#importpasswd').show();	
+			$('input[name="hipasswd"]').attr('value' , '1');
+		}else{
+			$('#importpasswd').hide();	
+			$('input[name="hipasswd"]').attr('value' , '0');
+		}
+	});
+})
+function selwalletall(fromname){
+	$('#'+fromname+' input[name="wallets[]"]').each(function(){
+		var val = $('#'+fromname+' input[name="cb_wallet"]').attr('checked');
+		if(val == 'checked'){
+			$(this).attr('checked','checked');
+		}else{
+			$(this).removeAttr('checked');
+		}
+	});
+
+}
+function js_alert(msg,url){
+
+	 Boxy.ask(msg, ["<?=$lang->common->yes?>"], function(val) { 
+		if(url != null){
+			location.href=url;	
+		} 
+	}, {title: "<?=$lang->main->message?>"});
+}
+
+function pos(wallet,type){
+	Boxy.load('/system/alertpos?stamp='+Math.random()+'&wallet='+wallet+'&type='+type,{modal:true});
+}
+function poslogout(wallet){
+	
+	$.get('/taiyiservice/wallet?act=unload&wallet='+wallet+'&stamp='+Math.random(),function(){
+		$.get('/taiyiservice/walletlistreload?stamp='+Math.random(),function(){
+			$.getJSON('/taiyiservice/wallet?act=load&wallet='+wallet+'&stamp='+Math.random(),function(obj){
+			location.href='/system?tab=unlock';		
+			});
+		});
+	});
+
+
+}
+</script>

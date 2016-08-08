@@ -1,0 +1,133 @@
+<?php
+class Cfos_MywalletController extends Ctrl_Base{
+
+	public function walletinfoAction(){
+		$pWallet = empty($_GET['wallet'])?'':trim($_GET['wallet']);
+		$pOnecfos = empty($_GET['onecfos'])?'0':trim($_GET['onecfos']);
+		if($pOnecfos == 'undefined'){$pOnecfos=1;}
+
+		if(empty($pOnecfos)){$tValid = 3600;}else{$tValid = 20;}
+		if(empty($pWallet)  ){Tool_Fnc::ajaxMsg($this->lang->mywallet->wallet_index_cannot_be_empty , '0');}
+
+		Tool_Fnc::sqliteLock();
+
+    	$tSqlite = Tool_Fnc::sqlite();
+		$tData = array();
+
+		$tMywallet = $tSqlite->getAll('select name,en_name,mark,status,rpcuser,rpcpassword,rpcport,img,small_img from mywallet where cfos=1');
+		if(empty($tMywallet) || !count($tMywallet)){
+			Tool_Fnc::ajaxMsg($this->lang->mywallet->the_wallet_is_not_founded , '0' );
+		}
+
+
+		if(!$tCoinsinfo = Cache_File::get('getinfo',$tValid)){
+			$tCoinsinfo = Tool_Fnc::rpc_client($tMywallet[0])->getinfo();
+			if( !is_null($tCoinsinfo['error'])){
+				Cache_File::set('listaddressgroupings' , '');
+				Cache_File::set('getinfo' , '');
+				Cache_File::set('getpeerinfo' , '');
+				Tool_Fnc::ajaxMsg( $this->lang->mywallet->acquiring_wallet_data_abnormal , '0' , $tCoinsinfo['error'] );
+			}
+			Cache_File::set('getinfo' , $tCoinsinfo);
+		}
+		$tData['blocks'] = empty($tCoinsinfo['blocks'])?0:$tCoinsinfo['blocks'];
+
+		$tCoinsinfo = Cache_File::get('listaddressgroupings',$tValid);
+		if($pOnecfos == 1 && !count($tCoinsinfo)){
+			$tCoinsinfo = Tool_Fnc::rpc_client($tMywallet[0])->listaddressgroupings();
+			if(!empty($tCoinsinfo['error']) &&!is_null($tCoinsinfo['error'])){
+				Tool_Fnc::ajaxMsg( $this->lang->mywallet->acquiring_wallet_data_abnormal , '0' , $tCoinsinfo['error'] );}
+				Cache_File::set('listaddressgroupings' , $tCoinsinfo);
+		}
+
+		foreach($tCoinsinfo as $tRow){
+			foreach($tRow as $tV){
+				//if($tV[0] != $pWallet){continue;}	
+				$tData['balance'][$tV[0]] += $tV[2];	
+			}
+		}
+		$tBalance = 0;
+		foreach($tCoinsinfo as $tRow){
+			foreach($tRow as $tV){
+				if($tV[0] != $pWallet){continue;}	
+				$tBalance += $tV[2];	
+			}
+		}
+
+	
+
+		$tData['balance'] = Tool_Fnc::etonumber($tBalance);
+
+		if(!$tPeerinfo = Cache_File::get('getpeerinfo',$tValid)){
+			$tPeerinfo = Tool_Fnc::rpc_client($tMywallet[0])->getpeerinfo();
+			Cache_File::set('getpeerinfo' , $tPeerinfo);
+		}
+
+		$tPeerheight = array();
+		foreach($tPeerinfo as $tRow){
+			if(!isset($tRow['height'])){$tRow['height'] = $tRow['startingheight']; }
+			$tPeerheight[] = $tRow['height'];	
+		}
+		sort($tPeerheight);
+		$tData['height'] = $tPeerheight[floor(count($tPeerheight)/2)];
+		$tSqlite->close();
+		Tool_Fnc::sqliteCloseLock();
+		unset($tSqlite);
+		Tool_Fnc::ajaxMsg('',1,$tData);
+	}
+	public function walletAction(){
+		Tool_Fnc::sqliteLock();
+
+		$tSqlite = Tool_Fnc::sqlite();
+		$pWallet = empty($_GET['wallet'])?'':trim($_GET['wallet']);
+		if(empty($pWallet)){Tool_Fnc::ajaxMsg($this->lang->mywallet->wallet_index_cannot_be_empty , '0');}
+		$tMywallet = $tSqlite->getRow('select * from mywallet where mark=\''.$pWallet.'\'');
+		if(empty($tMywallet) || !count($tMywallet)){Tool_Fnc::ajaxMsg($this->lang->mywallet->the_wallet_is_not_founded , '0' );}
+
+		#$tCoinsinfo = Tool_Fnc::rpc_client($tMywallet)->getinfo();
+		if(!$tCoinsinfo = Cache_File::get('listaddressgroupings',20)){
+			$tCoinsinfo = Tool_Fnc::rpc_client($tMywallet)->listaddressgroupings();
+			if(!empty($tCoinsinfo['error']) &&!is_null($tCoinsinfo['error'])){Tool_Fnc::ajaxMsg( $this->lang->mywallet->acquiring_wallet_data_abnormal , '0' , $tCoinsinfo['error'] );}
+			Cache_File::set('listaddressgroupings' , $tCoinsinfo);
+		}
+
+		$tBalance = 0;
+		foreach($tCoinsinfo as $tRow){
+			foreach($tRow as $tV){
+				if($tV[0] != $pWallet){continue;}	
+				$tBalance += $tV[2];	
+			}
+		}
+
+		if(!$tCoinsinfo = Cache_File::get('getinfo',20)){
+			$tCoinsinfo = Tool_Fnc::rpc_client($tMywallet)->getinfo();
+			if( !is_null($tCoinsinfo['error'])){Tool_Fnc::ajaxMsg( $this->lang->mywallet->acquiring_wallet_data_abnormal , '0' , $tCoinsinfo['error'] );}
+			Cache_File::set('getinfo' , $tCoinsinfo);
+		}
+
+		$tMywallet['unconfirmed'] = empty($tCoinsinfo['unconfirmed'])?0:$tCoinsinfo['unconfirmed'];
+		$tMywallet['stake'] = empty($tCoinsinfo['stake'])?0:$tCoinsinfo['stake'];#分红未成熟
+		$tMywallet['balance'] = Tool_Fnc::etonumber($tBalance);
+		$tMywallet['newmint'] = empty($tCoinsinfo['newmint'])?0:$tCoinsinfo['newmint'];
+		$tMywallet['blocks'] = empty($tCoinsinfo['blocks'])?0:$tCoinsinfo['blocks'];
+		$tMywallet['numberoftransactions'] = empty($tCoinsinfo['numberoftransactions'])?0:$tCoinsinfo['numberoftransactions'];
+		$tMywallet['newmint'] += $tMywallet['stake']; 
+
+		if($this->l == 'en'){
+			$tMywallet['name'] = ucfirst($tMywallet['en_name']); 		
+			if($tMywallet['name'] == 'Ybcoin'){
+				$tMywallet['name']  = 'YBC';	
+			}
+		}
+
+		/*if(!$tPeerinfo = Cache_File::get('getpeerinfo',10)){
+			$tPeerinfo = Tool_Fnc::rpc_client($tMywallet)->getpeerinfo();
+			Cache_File::set('getpeerinfo' , $tPeerinfo);
+		}
+		*/
+		
+		Tool_Fnc::sqliteCloseLock();
+		Tool_Fnc::ajaxMsg('',1,$tMywallet);
+	}
+}
+

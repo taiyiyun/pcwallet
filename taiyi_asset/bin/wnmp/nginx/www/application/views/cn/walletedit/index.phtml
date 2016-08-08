@@ -1,0 +1,256 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?=$lang->main->manage_wallet?> - <?=$lang->common->taiyi?></title>
+<link href="/css/<?=$l?>/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/home.css" />
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="/js/jquery.boxy.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
+<script type="text/javascript" src="/js/tab.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/boxy.css" />
+
+</head>
+
+<body>
+<div id="header">
+
+<?php include PATH_TPL . '/'. LANG ."/header.tpl.phtml" ?>	
+<div id="main">
+	<div class="my_wallet clearfix">
+		<h2 class="Font18 left redact"><?=$lang->main->manage_wallet?></h2>
+		<div class="Font14 right operate_wallet">
+			<a href="/mywallet" ><?=$lang->manage_wallet->back_to_my_wallet?></a>
+			<a href="/walletadd" class="plus" <?if($tCfos == 1){?> class="selectTag"<?}?>><?=$lang->common->add?></a>
+		</div>
+
+	</div>
+	<div class="coin_all">
+
+		<div id=tagContent>
+		<div class="tagContent selectTag" id="tagContent0" <?if($tCfos != 0){?>style='display: none;'<?}?>>
+	<div class="wallet clearfix">
+		<?php 
+		if(count($tWallet)){
+		foreach($tWallet as $tRow){$tBeta='';if($tRow['beta'] == 1){$tBeta = '<p class="beta"></p>';}?>
+		<div class="my_coin left">
+			<a href="/wallet/listtransactions?wallet=<?=$tRow['mark']?>">
+				<div class="clearfix coin_img">
+					<img src="<?=$tRow['small_img']?>" class="left" />
+					<?if($l == 'en'){if($tRow['en_name'] == 'ybcoin'){$tRow['en_name'] = 'YBC';}?>
+					<h1 class="Font20 left"><?=$tRow['en_name']?></h1>
+					<?}else{?>
+					<h1 class="Font20 left"><?=$tRow['name']?></h1>
+					<?}?>
+					<?if(!empty($tRow['pos'])){?>
+						<div class="lockarea" data='<?=$tRow['mark']?>'></div>
+					<?}?>
+
+				</div>
+				<?=$tBeta?>
+			</a>
+			<div class="coin_number Font12">
+				<p class="big"><?=$lang->manage_wallet->size?>：<span><?=$tRow['size']?></span>MB</p>
+				<p class="big"><?=$lang->manage_wallet->edition?>：<?=$tRow['version']?></p>
+
+				<p class="Font14 new_move">
+					<?if(!empty($tRow['update'])){?><a href="#"></a><button class="renewal updatebtn" href="#" data='<?=$tRow['mark']?>'><?=$lang->common->update?></button><?}?>
+					<button class="remove <?if($tRow['cfos'] == 1){?>cfos_delete<?}else{?>delete<?}?> " data='<?=$tRow['mark']?>' href="#"><?=$lang->manage_wallet->remove?></button>
+					<a class="renewal details" href="/walletadd/introduce?wallet=<?=$tRow['mark']?>"><?=$lang->common->look?></a>
+				</p>
+
+			</div>
+		</div>
+		<?}?>
+		<?}else{?>
+		<div class="no_con">
+			<p><?=$lang->manage_wallet->message1?></p>
+			<p><a href="/walletadd" class="plus"><?=$lang->manage_wallet->add_a_coin?></a></p>
+			<p style="font-size:14px; color:#888; margin-bottom:5px;"><?=$lang->manage_wallet->message2?></p>
+			<p style="font-size:14px; color:#888;"><?=$lang->manage_wallet->message3?></p>
+		</div>
+		<?}?>
+	</div>
+	</div>
+	<div class="tagContent" id="tagContent1" <?if($tCfos == 0){?>style='display: none;'<?}?>>
+	<div class="wallet clearfix">
+		<?php 
+		if(count($tCfosWallet)){
+		foreach($tCfosWallet as $tRow){$tBeta='';if($tRow['beta'] == 1){$tBeta = '<p class="beta"></p>';}?>
+		<div class="my_coin left">
+			<a href="/wallet/listtransactions?wallet=<?=$tRow['mark']?>">
+				<div class="clearfix coin_img">
+					<img src="<?=$tRow['small_img']?>" class="left" />
+					<?if($l == 'en'){if($tRow['en_name'] == 'ybcoin'){$tRow['en_name'] = 'YBC';}?>
+					<h1 class="Font20 left"><?=$tRow['en_name']?></h1>
+					<?}else{?>
+					<h1 class="Font20 left"><?=$tRow['name']?></h1>
+					<?}?>
+					<?if(!empty($tRow['pos'])){?>
+						<div class="lockarea" data='<?=$tRow['mark']?>'></div>
+					<?}?>
+
+				</div>
+				<?=$tBeta?>
+			</a>
+			<div class="coin_number Font12">
+				<p class="big"><?=$lang->manage_wallet->size?>：<span><?=$tRow['size']?></span>MB</p>
+				<p class="big"><?=$lang->manage_wallet->edition?>：<?=$tRow['version']?></p>
+
+				<p class="Font14 new_move">
+					<?if(!empty($tRow['update'])){?><a href="#"></a><button class="renewal updatebtn" href="#" data='<?=$tRow['mark']?>'><?=$lang->common->update?></button><?}?>
+					<button class="remove <?if($tRow['cfos'] == 1){?>cfos_delete<?}else{?>delete<?}?> " data='<?=$tRow['mark']?>' href="#"><?=$lang->manage_wallet->remove?></button>
+					<a class="renewal details" href="/walletadd/introduce?wallet=<?=$tRow['mark']?>"><?=$lang->common->look?></a>
+				</p>
+
+			</div>
+		</div>
+		<?}?>
+		<?}else{?>
+		<div class="no_con">
+			<p><?=$lang->manage_wallet->message4?></p>
+			<p><a href="/walletadd?cfos=1" class="plus"><?=$lang->manage_wallet->add_a_asset?></a></p>
+			<p style="font-size:14px; color:#888; margin-bottom:5px;"><?=$lang->manage_wallet->message2?></p>
+			<p style="font-size:14px; color:#888;"><?=$lang->manage_wallet->message3?></p>
+		</div>
+		<?}?>
+	</div>
+	</div>
+</div>
+</div>
+</div>
+<?php include PATH_TPL . '/'. LANG ."/footer.tpl.phtml" ?>
+</body>
+</html>
+<script>
+$(function(){
+
+	window.setInterval(function(){
+		$('.lockarea').each(function(tKey,tobj){
+			tWallet = $(tobj).attr('data'); 	
+			var str = $(tobj).html();
+			if(str == ''){
+			$.getJSON('/mywallet/walletstatus?wallet='+tWallet+'&stamp='+Math.random(),function(obj){
+				if(obj.status == 1){
+					if(obj.data.passwallet == 1){
+						$(tobj).html('&nbsp;');	
+					}else{
+						if(obj.data.unlock == 1){
+							$(tobj).html('<a href="/system?tab=unlock" class="lock lock_open" title="<?=$lang->my_wallet->message1?>"></a>');	
+						}else{
+							$(tobj).html('<a href="/system?tab=unlock" class="lock" title="<?=$lang->my_wallet->message2?>"></a>');	
+						}								
+					}
+				}
+			});
+			}
+		});			
+	},2000);
+
+	$('.delete').click(function(){
+		$('.delete').attr('disabled','true');
+		$('.cfos_delete').attr('disabled','true');
+		$('.updatebtn').attr('disabled','true');
+		$(this).after('<img src="/images/loading02.gif" class="loading02">');
+		var  wallet = $(this).attr('data');
+		Boxy.ask('<?=$lang->manage_wallet->do_you_want_to_delete_this_wallet?>', ["<?=$lang->common->yes?>","<?=$lang->common->no?>"], function(val) { 
+		if(val == '<?=$lang->common->yes?>'){
+		
+		$.get('/taiyiservice/wallet?act=unload&wallet='+wallet+'&stamp='+Math.random(),function(){
+		$.getJSON('/walletedit/delete?wallet='+wallet+'&stamp='+Math.random(),function(obj){
+			if(obj.status == 1){
+				$.get('/taiyiservice/walletlistreload?stamp='+Math.random(),function(){
+					js_alert(obj.msg , '/walletedit');
+				});
+			}else{
+				js_alert(obj.msg);	
+				$('.delete').removeAttr('disabled');
+				$('.cfos_delete').removeAttr('disabled');
+				$(this).next('img').remove();
+			}
+		});
+		});
+		}else{
+			$('.delete').removeAttr('disabled');
+			$('.cfos_delete').removeAttr('disabled');
+			$('.updatebtn').removeAttr('disabled');
+			$(this).next('img').remove();
+			return false;			
+		}
+		}, {title: "<?=$lang->main->message?>"});
+		
+	});		
+	$('.cfos_delete').click(function(){
+		$('.delete').attr('disabled','true');
+		$('.cfos_delete').attr('disabled','true');
+		$('.updatebtn').attr('disabled','true');
+		$(this).after('<img src="/images/loading02.gif" class="loading02">');
+		var  wallet = $(this).attr('data');
+		Boxy.ask('<?=$lang->manage_wallet->do_you_want_to_delete_this_wallet?>', ["<?=$lang->common->yes?>","<?=$lang->common->no?>"], function(val) { 
+		if(val == '<?=$lang->common->yes?>'){
+		
+		$.getJSON('/walletedit/cfos_delete?wallet='+wallet+'&stamp='+Math.random(),function(obj){
+			if(obj.status == 1){
+				js_alert(obj.msg , '/walletedit?cfos=1');
+			}else{
+				js_alert(obj.msg);	
+				$('.cfos_delete').removeAttr('disabled');
+				$(this).next('img').remove();
+			}
+		});
+		}else{
+			$('.delete').removeAttr('disabled');
+			$('.cfos_delete').removeAttr('disabled');
+			$('.updatebtn').removeAttr('disabled');
+			$(this).next('img').remove();
+			return false;			
+		}
+		}, {title: "<?=$lang->main->message?>"});
+		
+	});		
+
+	$('.updatebtn').click(function(){
+		$('.updatebtn').attr('disabled','true');
+		$('.delete').attr('disabled','true');
+		$('.cfos_delete').attr('disabled','true');
+		$(this).after('<img src="/images/loading02.gif" class="loading02">');
+		//$('.delete').after('<img src="/images/loading02.gif">');
+
+		var  wallet = $(this).attr('data');
+		Boxy.ask('<?=$lang->wallet_edit->message1?>', ["<?=$lang->common->yes?>","<?=$lang->common->no?>"], function(val) { 
+		if(val == '<?=$lang->common->yes?>'){
+
+		$.get('/taiyiservice/wallet?act=unload&wallet='+wallet+'&stamp='+Math.random(),function(){
+		$.getJSON('/walletedit/update?wallet='+wallet+'&stamp='+Math.random(),function(obj){
+			//$.get('/taiyiservice/restart',function(){
+			if(obj.status == 1){
+				js_alert(obj.msg , '/mywallet');
+			}else{
+				js_alert(obj.msg);	
+			}			
+			//});
+		
+		});
+		});
+		}else{
+			$('.updatebtn').removeAttr('disabled');
+			$('.delete').removeAttr('disabled');
+			$('.cfos_delete').removeAttr('disabled');
+		//	$('.delete').next('img').remove();
+			return false;			
+		}
+		}, {title: "<?=$lang->main->message?>"});
+
+
+	});
+
+})
+function js_alert(msg,url){
+	 Boxy.ask(msg, ["<?=$lang->common->yes?>"], function(val) { 
+		if(url != null){
+			location.href=url;	
+		} 
+	}, {title: "<?=$lang->main->message?>"});
+}
+</script>

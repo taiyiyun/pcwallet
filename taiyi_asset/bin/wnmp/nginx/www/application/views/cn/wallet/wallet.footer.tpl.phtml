@@ -1,0 +1,25 @@
+<script>
+$(function(){
+	getbalance();	
+	walletstatus('<?=$tWallet?>');
+})
+function getbalance(){
+	$('#balance').html('<img src="/images/loading02.gif">');
+	$.getJSON('/mywallet/walletinfo?wallet=<?=$tWallet?>'+'&stamp='+Math.random(),function(obj){
+		if(obj.data.balance != '' || obj.data.balance != 'undefined'){
+			$('#balance').html(obj.data.balance);	
+		}	
+		if(obj.data.name != '' || obj.data.name != 'undefined'){
+			$('.wallet_name').html(obj.data.name);	
+		}
+		if(obj.data.unconfirmed != '' || obj.data.unconfirmed != 'undefined'){
+			$('.unconfirmed').html(obj.data.unconfirmed);	
+		}
+		if(obj.data.newmint != '' || obj.data.newmint != 'undefined'){
+			$('.newmint').html(obj.data.newmint);	
+		}
+
+	});		
+}
+
+</script>

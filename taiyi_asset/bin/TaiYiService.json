@@ -1,0 +1,21 @@
+{
+    "ngix": {
+        "start": [
+            { "cmd": "./wnmp/php5/php.exe ./wnmp/nginx/www/shell/unlockinit.php", "show": "false" },
+            { "cmd": "./wnmp/php5/php-cgi.exe -b 127.0.0.1:9001 -c ./wnmp/php5/php.ini", "show": "false" },
+            { "cmd": "./wnmp/php5/php-cgi.exe -b 127.0.0.1:9002 -c ./wnmp/php5/php.ini", "show": "false" },
+            { "cmd": "./wnmp/php5/php-cgi.exe -b 127.0.0.1:9003 -c ./wnmp/php5/php.ini", "show": "false" },
+            { "cmd": "./wnmp/php5/php-cgi.exe -b 127.0.0.1:9004 -c ./wnmp/php5/php.ini", "show": "false" },
+            { "cmd": "./wnmp/php5/php-cgi.exe -b 127.0.0.1:9005 -c ./wnmp/php5/php.ini", "show": "false" },
+            { "cmd": "./wnmp/php5/php-cgi.exe -b 127.0.0.1:9006 -c ./wnmp/php5/php.ini", "show": "false" },
+            { "cmd": "./wnmp/nginx/nginx.exe -p ./wnmp/nginx/", "show": "false" }
+        ],
+        "stop": [
+            { "cmd": "", "show": "false" }
+        ],
+        "kill": [
+            { "name": "nginx.exe" },
+            { "name": "php-cgi.exe" }
+        ]
+    }
+}

@@ -1,0 +1,36 @@
+<script>
+$(function(){
+    getbalance();
+    walletstatus('cfos');
+    
+    waitingbalance = true;
+    window.setInterval(function(){
+        if(waitingbalance){
+            getbalance();
+        }
+    },1000 );
+})
+function getbalance(){
+    $('#balance').html('<img src="/images/loading02.gif">');
+    $.getJSON('/cfos_mywallet/wallet?wallet=<?=$tWallet?>'+'&stamp='+Math.random(),function(obj){
+        waitingbalance = false;
+		if(obj.data.code == -32601){
+			$('#balance').html('--');
+			$('.wallet_name').html('--');
+		}
+        if(obj.data.balance != '' || obj.data.balance != 'undefined'){
+            $('#balance').html(obj.data.balance);
+        }
+        if(obj.data.name != '' || obj.data.name != 'undefined'){
+            $('.wallet_name').html(obj.data.name);
+        }
+        if(obj.data.unconfirmed != '' || obj.data.unconfirmed != 'undefined'){
+            $('.unconfirmed').html(obj.data.unconfirmed);
+        }
+        if(obj.data.newmint != '' || obj.data.newmint != 'undefined'){
+            $('.newmint').html(obj.data.newmint);
+        }    
+    });
+}
+
+</script>

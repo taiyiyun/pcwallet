@@ -1,0 +1,355 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Pragma"   content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title><?=$lang->main->my_wallet?> - <?=$lang->common->taiyi?></title>
+<link href="css/<?=$l?>/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="css/<?=$l?>/home.css" />
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/raphael.js"></script>
+
+<style type="text/css">
+.box,.box_tb{
+    background: url(images/investjd.png);
+    width:120px;
+    height:120px;
+    margin:0 auto;
+}
+</style>
+</head>
+
+<body>
+<?php include PATH_TPL . '/'. LANG ."/header.tpl.phtml" ?>
+<div id="main">
+    <div class="my_wallet clearfix">
+        <h2 class="Font18 left"><?=$lang->main->my_wallet?></h2>
+        <ul class="Font14 right">
+            <li><a href="/walletedit" class="redact"><?=$lang->main->manage_wallet?></a></li>
+            <li><a href="/walletadd" class="plus"><?=$lang->main->add_a_coin?></a></li>
+        </ul>
+    </div>
+    <div class="wallet clearfix" id='wallet'>
+        <?
+        if(count($tMywallet)){
+        $tWalletlist = array();
+        foreach($tMywallet as $tRow){$tWalletlist[] = $tRow['mark'];?>
+        <?if($tRow['status'] == 3){?>
+        <div class="my_coin left coin_div"  status='<?=$tRow['status']?>' wallet='<?=$tRow['mark']?>'>
+                <div class="clearfix coin_img">
+                    <div class="left"><img src="http://clientapi.taiyi.yuanbao.com/<?=$tRow['small_img']?>" /></div>
+                    <?if($l == 'en'){if($tRow['en_name'] == 'ybcoin'){$tRow['en_name'] = 'YBC';}?>
+                    <h1 class="Font20 left"><?=ucfirst($tRow['en_name'])?></h1>
+                    <?}else{?>
+                    <h1 class="Font20 left"><?=$tRow['name']?></h1>
+                    <?}?>
+                </div>
+                <div style='display:none' class="bill-goods-list blocks o_blocks" data='<?=$tRow['mark']?>'>
+                        <div id='box_tb_<?=$tRow['mark']?>' class='box_tb' style='position:relative' num='0' size='0'>
+                        </div>
+                        <div style='position:absolute;top:55px' class='cont'>
+                            <div class="process-num Font30" id='<?=$tRow['mark']?>_percent'>0%</div>
+                            <p class="process_state Font14" id='<?=$tRow['mark']?>_status'><?=$lang->my_wallet->blockchain_synchronizing?>...</p>
+                            <p class="process_plan  Font12"></p>
+                        </div>
+                </div>
+
+                <div   class="coin_number coin_show Font14 coin_number_<?=$tRow['mark']?> o_coin" data='<?=$tRow['mark']?>'>
+                </div>
+
+            <!--<?if(!empty($tRow['update'])){?>blocks
+            <a alt="<?=$lang->common->update?>" title="<?=$lang->common->update?>" class="update Font12" href="/walletedit"></a>
+            <?}?>
+            -->
+        </div>
+        <?}else{?>
+        <div class="my_coin left"   status='<?=$tRow['status']?>' wallet='<?=$tRow['mark']?>'>
+            <a href="#" id='a_<?=$tRow['mark']?>'>
+                <div class="clearfix coin_img">
+                    <div class="left"><img src="<?=$tRow['small_img']?>" /></div>
+                    <?if($l == 'en'){if($tRow['en_name'] == 'ybcoin'){$tRow['en_name'] = 'YBC';}?>
+                    <h1 class="Font20 left"><?=ucfirst($tRow['en_name'])?></h1>
+                    <?}else{?>
+                    <h1 class="Font20 left"><?=$tRow['name']?></h1>
+                    <?}?>
+
+                </div>
+                <div class="bill-goods-list blocks">
+                        <div id='box_<?=$tRow['mark']?>' class='box' style='position:relative' num='0' size='0'>
+                        </div>
+                        <div style='position:absolute;top:55px'>
+                            <div class="process-num Font30" id='<?=$tRow['mark']?>_percent'>0%</div>
+                            <p class="process_state Font14" id='<?=$tRow['mark']?>_status'><?=$lang->my_wallet->downloading?>...</p>
+                        </div>
+                </div>
+            </a>
+        </div>
+        <?}?>
+        <?}?>
+        <?}else{?>
+        <div class="no_con">
+            <p><?=$lang->manage_wallet->message1?></p>
+<p><a href="/walletadd" class="plus"><?=$lang->manage_wallet->add_a_coin?></a></p>
+<p style="font-size:14px; color:#888; margin-bottom:5px;"><?=$lang->manage_wallet->message2?></p>
+<p style="font-size:14px; color:#888;"><?=$lang->manage_wallet->message3?></p>
+        </div>
+        <?}?>
+    </div>
+</div>
+<?php include PATH_TPL . '/'. LANG ."/footer.tpl.phtml" ?>
+</body>
+</html>
+<script>
+$(function(){
+    $('#wallet > .my_coin').each(function(tkey , tobj){
+        var tStatus = $(tobj).attr('status');
+        var tWallet = $(tobj).attr('wallet');
+
+        if(tStatus == 0){
+            init(tWallet);
+        }else if(tStatus == 1){
+            down(tWallet);
+        }else if(tStatus == 2){
+            install(tWallet);
+        }else if(tStatus == 3){
+            walletdata($(tobj),tWallet);
+        }
+    })
+    $.get('/walletadd/synchronous?=<?=implode('-',$tWalletlist)?>'+'&stamp='+Math.random());
+
+    window.setInterval(function(){
+        $('.blocks').each(function(tKey,tobj){
+            var status = $(tobj).css('display');
+            if(status == 'block'){
+            var tWallet = $(tobj).attr('data');
+
+            $.getJSON('/cfos_mywallet/walletinfo?wallet='+tWallet+'&stamp='+'blocks'+Math.random(),function(obj){
+
+                if(obj.status == 1){
+                    num = obj.data.height-obj.data.blocks;
+                    if( num < 10 && obj.data.height != 0 && obj.data.blocks != 0 && obj.data.height != null){
+                        add_block(100 ,tWallet);
+                        $(tobj).css('display','none');
+                        var enter = $('.coin_number_'+tWallet).children('.enter').html();
+                        if(enter == undefined){
+                            str = "<a href='/wallet/listtransactions?wallet="+tWallet+"' class=\"plus_btn Font16 enter\"><?=$lang->my_wallet->enter?></a>";
+                            $('.coin_number_'+tWallet).append(str);
+                        }
+                        $('.coin_number_'+tWallet).css('display','block');
+                        $(tobj).parent().attr('synchronous','1');
+                    }else{
+                        if(obj.data.height == null){
+                            obj.data.height = obj.data.blocks+500;
+                        }
+                        $(tobj).children('.cont').children('.process_plan').html(obj.data.blocks+'/'+obj.data.height);
+                        //$(tobj).html("<p>区块同步</p><p style='color:#f60'>"+obj.data.blocks+'/'+obj.data.height +"</p>");
+                        var p = obj.data.blocks*100/obj.data.height;
+                        if(p == 0){
+                            p = 1;
+                        }
+                        percent=Math.round(p);
+                        add_block(percent ,tWallet);
+                    }
+                }
+            });
+            }
+        });
+    },5000);
+
+    window.setInterval(function(){
+        $('.again_connection').each(function(tKey,tobj){
+            tWallet = $(tobj).attr('data');
+            $.getJSON('/cfos_mywallet/walletinfo?wallet='+tWallet+'&stamp='+'again'+Math.random(),function(obj){
+                if(obj.status == 1){
+                    location.href='/cfos_mywallet';
+                }else{
+                    var runtime = $(tobj).attr('runtime');
+                    var starttime = $(tobj).attr('starttime');
+
+                    var time = new Date().getTime();
+
+                    if(((time-starttime) > (60*1*1000)) && ((time-starttime) <= (60*3*1000))){
+                        $(tobj).children('span').remove();
+                        $(tobj).children('img').after('<span class="loadingmsg"><?=$lang->my_wallet->message3?></span>');
+                    }else if((time-starttime) > (60*30*1000)){
+                        $(tobj).children('span').remove();
+                        $(tobj).children('img').after('<span class="loadingmsg"><?=$lang->my_wallet->message4?></span>');
+                    }
+                }
+
+            });
+        });
+    }, 5000);
+
+    //区块同步
+    $('.coin_div').mouseover(function(){
+        $(this).find('.o_coin').css('display','block');
+        $(this).find('.o_blocks').css('display','none');
+
+    });
+
+    $('.coin_div').mouseout(function(){
+        var synchronous = $(this).attr('synchronous');
+        var loadingimg = $(this).find('.o_coin').children('p').children('.loading01').attr('src');
+        {
+            $(this).find('.o_coin').css('display','none');
+            $(this).find('.o_blocks').css('display','block');
+        }
+    });
+
+
+})
+//加载钱包数据
+function walletdata(tobj,pWallet){
+    tobj.children('.coin_number').html('<p class="again_connection" data="'+pWallet+'" runtime="0" starttime="'+new Date().getTime()+'"><img src="/images/loading.gif" class="loading01"/></p>');
+    $.getJSON('/cfos_mywallet/walletinfo?wallet='+pWallet+'&stamp='+'walletdata'+Math.random(),function(obj){
+        if(obj.status == 1){
+//            var str = " <p class='my_money'>余额：<span class='Font20'>"+obj.data.balance+"</span></p><p>未确认数："+obj.data.unconfirmed+"</p><p>未成熟数："+obj.data.newmint+"</p><p>交易笔数："+obj.data.numberoftransactions+"</p>";
+            var str = "<p class='Font16'><?=$lang->my_wallet->balance?></p> <p class='my_money Font20'>"+obj.data.balance+"</p>";
+            num = obj.data.height-obj.data.blocks;
+
+            if( num < 10 && obj.data.height != 0 && obj.data.blocks != 0 && obj.data.height != null){
+                str += "<a href='/wallet/listtransactions?wallet="+pWallet+"' class=\"plus_btn Font16\"><?=$lang->my_wallet->enter?></a>";
+                tobj.attr('synchronous','1');
+            }else{
+                if(obj.data.height == null){
+                    obj.data.height = obj.data.blocks+500;
+                }
+                tobj.children('.blocks').css('display','block');
+                $('.coin_number_'+pWallet).css('display','none');
+
+                //str += "<p class='blocks' data='"+pWallet+"'>区块同步中...</p>";
+                //str += '<div class="blocks" data="'+pWallet+'"><div class="same"><p class="Font12" data="'+pWallet+'"  style="margin-right:0px;padding-right:0px;"><?=$lang->my_wallet->blockchain_synchronizing?>...</p><p><img src="/images/same.gif" /></p></div></div>';
+            }
+            //str += "</p>";
+            tobj.children('.coin_number').html(str);
+            tobj.attr('href' , '/wallet/listtransactions?wallet='+pWallet);
+        }else{
+            if(obj.data.code == '000'){
+
+                tobj.children('.coin_number').html('<p class="again_connection" data="'+pWallet+'" runtime="0" starttime="'+new Date().getTime()+'"><img src="/images/loading.gif" class="loading01"></p>');
+            }else{
+                tobj.children('.coin_number').html(obj.msg);
+            }
+        }
+    });
+}
+
+//初始化
+function init(pWallet){
+    $('#'+pWallet+'_status').html('<?=$lang->my_wallet->initializing?>...');
+    charge(pWallet,0);
+    $.getJSON('/cfos_mywallet/downloadinit?wallet='+pWallet+'&stamp='+Math.random(),function(obj){
+        if(obj.status == 1){
+            $('#'+pWallet+'_status').html('<?=$lang->my_wallet->initialization_completed?>');
+            charge(pWallet,0);
+            down(pWallet);
+        }else{
+            $('#'+pWallet+'_status').after('<p class="az_errormsg">'+obj.msg+'</p>');
+        }
+    });
+}
+//下载
+function down(pWallet){
+
+    $('#'+pWallet+'_status').html('<?=$lang->my_wallet->downloading?>...');
+    $.getJSON('/cfos_mywallet/downloadrun?wallet='+pWallet+'&stamp='+Math.random(),function(obj){
+        if(obj.status == 1){
+            $('#'+pWallet+'_status').html('<?=$lang->my_wallet->installation_completed?>');
+            charge(pWallet,0);
+            install(pWallet);
+        }else{
+            $('#'+pWallet+'_status').after('<p class="az_errormsg">'+obj.msg+'</p>');
+        }
+    });
+
+     downwalletsize(pWallet);
+}
+function downwalletsize(pWallet){
+    $.get('/cfos_mywallet/downheader?wallet='+pWallet+'&stamp='+Math.random(),function(){
+    $.get('/cfos_mywallet/downwalletsize?wallet=' + pWallet+'&stamp='+Math.random(),function(data){
+        $('#box_'+pWallet).attr('size' , data);
+        var timer = window.setInterval(function(){
+            downwalletnowsize(pWallet , timer);
+        }, 1000);
+    });
+    });
+}
+function downwalletnowsize(pWallet,timer){
+
+    $.get('/cfos_mywallet/downwalletnowsize?wallet=' + pWallet+'&stamp='+Math.random(),function(data){
+
+        var size = parseInt($('#box_'+pWallet).attr('size'));
+        if(size == data){
+            clearInterval(timer);
+        }
+        data = parseInt(data);
+        percent=Math.round(data*100/size);
+
+        charge(pWallet,percent);
+    });
+}
+//安装
+function install(pWallet){
+
+    $('#'+pWallet+'_status').html('<?=$lang->my_wallet->installing?>...');
+    $.getJSON('/cfos_mywallet/install?wallet='+pWallet+'&stamp='+Math.random(),function(obj){
+        if(obj.status == 1){
+            $('#'+pWallet+'_status').html('<?=$lang->my_wallet->installed?>');
+            charge(pWallet,100);
+            $.get('/taiyiservice/walletlistreload'+'?stamp='+Math.random(),function(){
+
+                $.get('/taiyiservice/wallet?act=load&wallet='+pWallet+'&stamp='+Math.random(),function(){
+                    $('#a_'+pWallet).attr('href' , '/cfos_mywallet');
+                    $('#'+pWallet+'_status').after('<p style="margin-left:0;"><a href="/cfos_mywallet" class="plus_btn btn_enter Font16"><?=$lang->common->confirm?></a></p>');
+                });
+            });
+        }else{
+            $('#'+pWallet+'_status').after('<p class="az_errormsg">'+obj.msg+'</p>');
+        }
+    });
+}
+function add(args,wallet){
+    var object = document.getElementById('box_'+wallet);
+    var num = parseInt($('#box_'+wallet).attr('num'));
+    function loadImg (data,wallet){
+        i = (data-1);
+        var imgLeft = -(i*120+(i*30))+'px'
+        object.style.backgroundPosition = imgLeft+'\t'+'0px'
+        $('#box_'+wallet).next().children('div').html((i+1)+'%');
+    }
+    if(args+num <= 100){
+        loadImg(args+num,wallet);
+    }
+    num++;
+    $('#box_'+wallet).attr('num' , num);
+}
+function add_block(args,wallet){
+    var object = document.getElementById('box_tb_'+wallet);
+    var num = parseInt($('#box_tb_'+wallet).attr('num'));
+    function loadImg (data,wallet){
+        i = (data-1);
+        var imgLeft = -(i*120+(i*30))+'px'
+        object.style.backgroundPosition = imgLeft+'\t'+'0px'
+        $('#box_tb_'+wallet).next().children('div').html((i+1)+'%');
+    }
+    if(args+num <= 100){
+        loadImg(args+num,wallet);
+    }
+    $('#box_tb_'+wallet).attr('num' , num);
+}
+
+function charge(wallet,num){
+    var oldnum = $('#box_'+wallet).attr('num');
+    if(oldnum < num || oldnum == num){
+        $('#box_'+wallet).attr('num' , num);
+        add(0,wallet);
+
+    }
+}
+
+</script>
+

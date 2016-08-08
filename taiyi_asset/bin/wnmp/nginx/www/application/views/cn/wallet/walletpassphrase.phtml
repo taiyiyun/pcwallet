@@ -1,0 +1,21 @@
+
+<div class="logout-content">
+<form onkeydown="if(event.keyCode==13)return false;" id='formpwd'>
+	<label><?=$lang->wallet->message13?></label><input style='height: 16px;padding: 8px 0px 8px 2px;border: 1px solid #29A8E1;margin: 5px;border-radius: 5px;' type="password" name="password">
+	<input  type="button" onclick='passwdck()' value="<?=$lang->common->yes?>" class="btn_sub boxy-btn3" name="passwdbtn">
+</form>
+</div>
+
+<script>
+function passwdck(){
+	var data = $("#formpwd").serialize();
+	$.post('/wallet/walletpassphrase?wallet=<?=$tWallet?>&submit=1&stamp='+Math.random(),data,function(obj){
+		var obj = eval('('+obj+')');
+		if(obj.status == 1){
+			location.reload(false);
+		}else{
+			js_alert(obj.msg);
+		}
+	});	
+}	
+</script>

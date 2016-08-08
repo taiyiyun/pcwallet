@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>太一</title>
+<link href="/css/<?=$l?>/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/home.css" />
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/raphael.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+</head>
+
+<body>
+
+<?php include PATH_TPL . '/'. LANG ."/header.tpl.phtml" ?>	
+<div id="main">
+
+	<?php include PATH_TPL . '/'. LANG ."/wallet/wallet.header.tpl.phtml" ?>	
+	<!-- 更多操作 开始 -->
+	<div class="my_wallet my_add clearfix">
+		<h2 class="Font18 left">钱包</h2>
+	</div>
+<!--	<div class="wallet wallet_tabel clearfix">
+		<p>余额:<?=$tGetinfo['balance']?> YBC </p>
+		<p>股份:<?=$tGetinfo['stake']?> YBC </p>
+		<p>未确认的:<?=$tGetinfo['newmint']?> YBC </p>
+		<p>交易笔数：<?=count($tTransactions)?> </p>
+	</div>
+	-->
+	<!-- 更多操作 结束 -->
+</div>
+<?php include PATH_TPL . '/'. LANG ."/wallet/wallet.footer.tpl.phtml" ?>
+<?php include PATH_TPL . '/'. LANG ."/footer.tpl.phtml" ?>
+</body>
+</html>

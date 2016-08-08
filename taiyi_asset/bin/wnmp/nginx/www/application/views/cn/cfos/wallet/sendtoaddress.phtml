@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?=$lang->main->send?> - <?=$lang->common->taiyi?></title>
+<link href="/css/<?=$l?>/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/home.css" />
+
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/raphael.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="/js/jquery.boxy.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/boxy.css" />
+</head>
+
+<body>
+<?php include PATH_TPL . '/'. LANG ."/header.tpl.phtml" ?>
+<div id="main">
+	<?php include PATH_TPL . '/'. LANG ."/cfos/wallet/wallet.header.tpl.phtml" ?>	
+		
+	<!-- 发送开始 -->
+	<div class="my_wallet my_add clearfix">
+		<h2 class="Font18 left"><?=$lang->main->send?></h2>
+	</div>
+	<div class="wallet wallet_tabel clearfix">
+		<form id='sendform'  onkeydown="if(event.keyCode==13)return false;">
+			<ul class="coin_money">
+				<li><label><?=$lang->wallet->send_to?></label><input type="text" class="left" name='address'  value='<?=$pAddress?>'/><a href="/cfos_wallet/sendaddress?wallet=<?=$tWallet?>" class="add left"><?=$lang->wallet->choose_from_address_book?></a></li>
+				<li style='padding-top:5px;height:20px;line-height:20px;'><label>&nbsp;</label><?if($tWallet == 'ybcoin'){?><span class="Font14 tishi" style='width:800px'><?=$lang->wallet->message1?></span><?}?></li>
+				<li><label><?=$lang->common->label?></label><input type="text" name='account' value='<?=$pAccount?>' /></li>
+				<li><label><?=$lang->common->amount?></label><input type="text" name='amount' />
+<!--					<select>
+						<option>BTC</option>
+						<option>YBC</option>
+						<option>CNY</option>
+						<option>USD</option>
+					</select>-->
+				</li>
+				<li style="height:100%;" class="clearfix">
+					<label><?=$lang->wallet->select_the_payment_address?></label>
+					<div class="choose_bar left">
+					<div>
+					<table cellpadding="0" cellspacing="0" border="0" class="choose">
+						<thead>
+							<tr align="left" style="background:#fff; border-radius:5px;">
+								<th class="list01">&nbsp;</th>
+								<th class="list02"><?=$lang->common->label?></th>
+								<th class="list03"><?=$lang->wallet->address?></th>
+								<th class="list04"><?=$lang->my_wallet->balance?></th>
+							</tr>
+						</thead>
+					</table>
+					</div>
+					<div class="add_bar">
+					<table cellpadding="0" cellspacing="0" border="0" class="choose" id='paytable'>
+						<tbody>
+							<?php foreach($tPayaddress as $tKey => $tRow){?>
+							<tr align="left" class="<?if($tKey == 0){?>choose_add<?}?> pay_select" <?if($tKey != 0){?> style='display:none'<?}?>>
+								<td class="list01"><input type="radio" value="<?=$tRow['address']?>" <?if($tKey == 0){?> checked="checked"<?}?> class="option" name='payaddress' /></td>
+								<td class="list02"><?=$tRow['label']?></td>
+								<td class="list03"><?=$tRow['address']?></td>
+								<td class="list04"><?=$tRow['balance']?></td>
+							</tr>
+							<?}?>
+							<?php if(count($tPayaddress)<=0){?>
+							<tr align="center"><td colspan="4"><?=$lang->wallet->message16?></td></tr>
+							<?}else if(count($tPayaddress)>1){?>
+							<tr class="bg_none">
+								<td colspan="4"><button class="more_add"><?=$lang->common->more?></button></td>
+							</tr>
+							<?}?>
+						</tbody>
+					</table>
+					</div>
+					</div>
+				</li>
+				<?php if(empty($tPasswallet)){?><li><label><?=$lang->setting_page->wallet_password?></label><input type="password" name='password' /></li><?}?>
+				<li><label>&nbsp;</label><input type="button" name='add' class="btn_sub" value="添加" /></label>
+				<li><label>&nbsp;</label><input type="button" name='next' class="btn_next" value="去发送" /></li>
+			</ul>
+		</form>
+	</div>
+	<!-- 发送结束 -->
+</div>
+<?php include PATH_TPL . '/'. LANG ."/cfos/wallet/wallet.footer.tpl.phtml" ?>
+<?php include PATH_TPL . '/'. LANG ."/footer.tpl.phtml" ?>
+</body>
+</html>
+<script>
+$(function(){
+	$('input[name="add"]').click(function(){
+		var data = $('#sendform').serialize();                                    
+		$(this).after('<img src="/images/loading02.gif">');
+		$('.btn_sub').attr('disabled','true');
+		$.post('/cfos_wallet/addaddresstolist?wallet=<?=$tWallet?>&add=1', data ,function(obj){
+			var obj = eval('('+obj+')');
+			if(obj.status == 1){
+				js_alert('添加成功');
+				$('.btn_sub').next('img').remove();
+			}else{
+				js_alert(obj.msg);
+				$('.btn_sub').next('img').remove();
+			}
+			$('.btn_sub').removeAttr('disabled');
+		});  
+
+	});
+	$('input[name="next"]').click(function(){
+		location.href='/cfos_wallet/sendlist?wallet=<?=$tWallet?>';
+
+	});				
+	$('.pay_select').click(function(){
+		$(this).children('td').children('input[type="radio"]').attr('checked','checked');
+
+		$('#paytable tbody tr').each(function(){
+			$(this).removeClass('choose_add');			
+		});	
+		$(this).addClass('choose_add');
+	});
+	$('.more_add').click(function(){
+		$('#paytable tbody tr').each(function(){
+			$(this).css('display' , 'block');			
+		});	
+		$('.more_add').remove();
+	});
+})
+</script>

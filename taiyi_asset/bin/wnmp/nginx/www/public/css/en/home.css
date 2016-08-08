@@ -1,0 +1,267 @@
+/*** loading ***/
+.loading01{position: absolute; left: 50%; top: 50%; margin: -48px 0 0 -78px;}
+.loading02{position: absolute; left: 50%; top: 50%; margin: -12px 0 0 -12px;}
+
+.loading_bg{ position:absolute; left:50%; top:50%; margin-left:-960px; margin-top:-540px;}
+.taiyi{ position:absolute; left:50%; top:45%; margin-left:-250px; margin-top:-220px; width:500px;}
+.taiyi p{ text-align:center;}
+.loading_logo{ width:340px; margin:0 auto; background:url(/images/loading_logo.png) no-repeat; height:160px; _background:none; _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/loading_logo.png");}
+.enter{ display:block; height:340px; line-height:340px; width:340px; text-align:center; text-decoration:none; color:#fff; background:url(/images/enter.png) no-repeat; _background:none; _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/enter.png"); margin:0 auto; cursor:pointer; position:relative;}
+.enter:hover{ background:url(/images/enter_hover.png) no-repeat; _background:none; _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/enter_hover.png");}
+.enter img{ position:absolute; left:50%; margin-left:-50px; top:50%; margin-top:-15px;}
+.language{ text-align:center; color:#9accde;}
+.language a{ color:#9accde; margin:0 5px; text-decoration:none;}
+.language a:hover,.language .current{ color:#fff;}
+/******/
+
+/*** 首页 ***/
+.wallet{ margin:0 15px 0 15px;}
+.my_wallet{ margin:60px 30px 15px 30px;}
+.my_wallet h2{ background:url(/images/ty_icon.png) 0 -100px no-repeat; padding-left:25px; color:#333;}
+.my_wallet .plus{ background:url(/images/ty_icon.png) left -449px no-repeat; padding-left:25px; color:#333;}
+.my_wallet .redact{ background:url(/images/ty_icon.png) left -350px no-repeat; padding-left:25px; color:#333;}
+.my_wallet .operate_wallet{}
+.my_wallet .operate_wallet a{display:block; float:left; margin-left:10px;  color:#666; height:20px;}
+.my_wallet .operate_wallet a:hover{ color:#29a8e1;}
+.my_wallet .operate_wallet .redact{ background:url(/images/ty_icon.png) left -350px no-repeat; padding-left:25px; color:#666;}
+.my_wallet .operate_wallet .redact:hover{ background-position:left -400px; color:#29a8e1;}
+.my_wallet .operate_wallet .plus{ background:url(/images/ty_icon.png) left -450px no-repeat; padding-left:25px; color:#666;}
+.my_wallet .operate_wallet .plus:hover{ background-position:left -500px; color:#29a8e1;}
+
+
+.my_coin{ width:210px; height:240px; margin:15px; background:#29a8e1; border-radius:5px; position:relative;}
+.my_coin a{ text-decoration:none;}
+.my_coin .coin_img{ width:122px; margin:10px auto;}
+.my_coin h1{ color:#fff; padding-left:7px; height:40px; line-height:40px;}
+.lockarea{ position:absolute; right:5px; top:4px; height:20px; width:32px;}
+.lock{ display:block; height:20px; width:32px; background:#fff url(/images/lock_open.png) left top no-repeat;  border-radius:12px;}
+.lock:hover{ background:#a0e1ff url(/images/lock_open.png) right top no-repeat;}
+.lock_open{ background:#fff url(/images/lock_open.png) left bottom no-repeat;}
+.lock_open:hover{ background:#a0e1ff url(/images/lock_open.png) right bottom no-repeat;}
+.my_coin .coin_number{ background:#f3f5f7; height:150px; padding-top:30px; border-radius:0 0 4px 4px;}
+.my_coin .coin_number p{ line-height:180%; color:#333; text-align:center;}
+.my_coin .coin_number .my_money{ color:#29a8e1;}
+.my_coin .coin_number .same{ position:absolute; left:10px; bottom:15px; width:190px;}
+.my_coin .coin_number .same p{ color:#666; line-height:140%; margin-top:5px;}
+.my_coin .coin_number .plus_btn{ display:block; width:140px; height:40px; line-height:40px; background:#29a8e1; text-align:center; color:#fff; text-decoration:none; border:1px solid #29a8e1; border-radius:5px; margin-top:29px;}
+.my_coin .coin_number .plus_btn:hover{ background:#fff; color:#29a8e1;}
+.plus_btn{ display:block; width:140px; height:40px; line-height:40px; background:#fff; text-align:center; color:#29a8e1; text-decoration:none; border:1px solid #29a8e1; border-radius:5px;}
+.plus_btn:hover{ background:#29a8e1; color:#fff; border:1px solid #e6f5fb;}
+.btn_enter{ color:#fff; border:1px solid #e6f5fb; background:#29a8e1;}
+.btn_enter:hover{ background:#fff; color:#29a8e1;}
+.btn_enter{ position:absolute; left:35px; top:135px;}
+.process-wrap{ margin-top:30px; position:relative;}
+.process-con{ width:120px; margin:0 auto;}
+.process-num{ color:#fff; width:210px; text-align:center; position:absolute; top:40px;}
+.process_state{ color:#a3e0ff; width:210px; text-align:center; position:absolute; top:75px;}
+.process_plan{ color:#a3e0ff; width:210px; text-align:center; position:absolute; top:135px;}
+.update{ position:absolute; right:5px; bottom:15px; height:20px; width:20px; background:url(/images/ty_icon.png) left -1150px no-repeat; }
+.update:hover{ background-position:left -1200px;}
+.loadingmsg{position: absolute;width:180px;left:50%;margin-left:-90px;top:50%;margin-top:50px;}
+.az_errormsg{position: absolute;width:180px;top:140px;font-size:12px;color:#fff;margin:0px 0px 0px 10px;padding-right:0px;}
+/******/
+
+/*** 添加货币 ***/
+.keywords{ border:1px solid #dfdfdf; border-radius:5px; position:relative;}
+.keywords label{ position:absolute; left:5px; top:11px; font-size:12px; color:#999;}
+.keywords .keys{ padding:10px 0 10px 5px; border-radius:5px; width:200px;}
+.keywords input{ vertical-align:middle; border:0;}
+.search{ background:url(/images/search.jpg) no-repeat; height:40px; width:40px; border:0; margin:0; border-radius:0 5px 5px 0;}
+.coin{ width:210px; height:260px; margin:15px 15px 35px 15px; background:#f3f5f7; border-radius:5px; position:relative;}
+.coin:hover{ background:#daf1fb;}
+.coin a{ text-decoration:none;}
+.coin .coin_img{ text-align:center; padding-top:20px;}
+.coin .coin_img h1{ height:40px; line-height:40px; color:#333; text-decoration:none;}
+.coin .plus_btn{ display:block; width:140px; height:40px; line-height:40px; background:#fff; margin:10px auto 0 auto; text-align:center; color:#29a8e1; text-decoration:none; border:1px solid #29a8e1; border-radius:5px;}
+.coin .plus_btn:hover{ background:#29a8e1; color:#fff;}
+.beta{ position:absolute; left:-4px; top:10px; background:url(/images/beta.png) 0 0 no-repeat; height:20px; width:40px;}
+/******/
+
+/*** 管理 ***/
+.radact_coin{ width:210px; height:210px; margin:15px; background:#e6f5fb; border-radius:5px;}
+.radact_coin .coin_img{ text-align:center; height:40px; margin:20px 0 0 20px;}
+.radact_coin .coin_img h1{ margin-left:5px;}
+.radact_coin .remaining{ margin:25px 0 25px 10px; color:#333;}
+.radact_coin .remaining p{ height:25px; line-height:25px; color:#666;}
+.radact_coin .remaining p span{ color:#29a8e1; margin-right:5px; font-size:16px;}
+.coin_number .plus_btn{ display:block; width:130px; height:40px; line-height:40px; background:#fff; margin:10px auto 0 auto; text-align:center; color:#29a8e1; text-decoration:none; border:1px solid #29a8e1; border-radius:5px;}
+.coin_number .plus_btn:hover{ background:#29a8e1; color:#fff;}
+.my_coin .coin_number .big{ text-align:left; padding-left:30px;}
+.renewal,.remove{ background:#fff;  text-decoration:none; border-radius:5px; height:34px;  padding-bottom:3px; cursor:pointer;}
+.renewal{ color:#29a8e1; border:1px solid #29a8e1; margin-right:15px;}
+.renewal:hover{ background:#29a8e1; color:#fff;}
+.remove{ color:#f60; border:1px solid #f60;vertical-align: middle;}
+.remove:hover{ background:#f60; border:1px solid #f60; color:#fff;}
+.details {padding:6px 3px;vertical-align: middle;}
+.new_move{ margin-top:30px; height:36px; text-align:center;}
+/******/
+
+/*** 接收发送 ***/
+.my_add{ margin:60px 30px 15px 30px;}
+.my_add h2{ background:none; padding-left:0; color:#333;}
+
+.buy{ background:#e6f5fb; height:140px; padding:40px 30px 10px 30px; position:relative; border-bottom:1px solid #29a8e1;}
+.buy .current{ background:url(/images/current.jpg) center bottom no-repeat;}
+.receive{ padding-bottom:60px;}
+.receive p{ text-align:center;}
+.receive p a{ height:40px; line-height:40px; display:block; width:200px; text-align:center; background:#29a8e1; color:#fff; border-radius:5px; text-decoration:none; margin-top:10px;}
+.receive p a:hover{ background:#2bb4f1;}
+.present{ text-align:center; width:500px; position:absolute; left:50%; margin-left:-250px; top:10px; _top:5px; padding-bottom:20px;}
+.present .present_border{ border-bottom:1px solid #ccc; color:#666; padding-bottom:5px;}
+.present .present_border span{ padding:0 5px;}
+.present .notyet{ color:#666; margin:5px 0;}
+.present .notyet span{ color:#29a8e1;}
+.present a{ display:block; color:#666; text-decoration:underline; height:40px; line-height:40px; background:url(/images/ty_icon.png) 180px -540px no-repeat; padding-left:25px;}
+.present a:hover{ color:#29a8e1; background-position:180px -590px;}
+
+.wallet_tabel{ border-top:1px solid #ccc; margin:0 30px;}
+.wallet_tabel tr:hover{ background:#e6f5fb;}
+.wallet_tabel tr td{ height:40px; line-height:40px; color:#333;padding:0 20px;}
+
+.coin_money li{ height:40px; line-height:40px; padding-top:20px;}
+.coin_money li label{ float:left; width:160px; text-align:right; margin-right:10px;}
+.coin_money li input{ width:300px; height:18px; padding:10px 0 10px 3px; border-radius:5px; border:1px solid #ccc;}
+.coin_money li select{ height:40px; width:100px; border-radius:5px; border:1px solid #ccc;}
+.coin_money li .btn_sub{ width:305px; text-align:center; height:50px; line-height:50px; background:#29a8e1; padding:0; font-size:18px; color:#fff; border:0;}
+.coin_money li .btn_sub_disable{ width:305px; text-align:center; height:50px; line-height:50px; background:#3c3c3c; padding:0; font-size:18px; color:#fff; border:0;}
+.coin_money li .btn_sub:hover{ background:#2bb4f1;}
+.coin_money li .add{ background:url(/images/ty_icon.png) left -640px no-repeat; padding-left:25px; margin-left:10px; display:block; height:38px; line-height:38px; color:#666;}
+.coin_money li .add:hover{ background-position:left -690px; color:#29a8e1;}
+
+.add_tabel{ width:100%;}
+.add_tabel tr th{ background:#e6f5fb; height:40px; line-height:40px;}
+
+.send{ color:#666; background:url(/images/ty_icon.png) left -750px no-repeat; padding-left:25px; margin-right:15px;}
+.send:hover{ background-position:left -800px; color:#29a8e1;}
+.send_delete{ background-position:left -850px;}
+.send_delete:hover{ background-position:left -900px; color:#f00;}
+.coin_money li .choose_bar{ width:600px; border:1px solid #ccc; border-radius:5px;}
+.coin_money li .choose{ width:100%;}
+.coin_money li .choose_bar .add_bar{ max-height:205px; overflow-y:scroll;}
+.choose tr{ height:40px;}
+.coin_money li .choose .option{ width:13px; height:13px;}
+.choose tr th{ font-size:14px; border-radius:5px; height:30px; line-height:30px; padding:0 0 0 15px;}
+.choose tr td{ font-size:14px; height:40px; line-height:24px; border-top:1px solid #eee; padding:0 0 0 15px;}
+.choose tr .list01{ width:15px;}
+.choose tr .list02{ width:100px; text-align:center;}
+.choose tr .list03{ width:340px; text-align:center;}
+.choose tr .list03{ text-align:center;}
+.choose .choose_add{  background:#e6f5fb;}
+.choose .bg_none{ background:none;}
+.choose .bg_none:hover{ background:none;}
+.choose .bg_none td{ padding:10px 0;}
+.choose .bg_none .more_add{ color:#29a8e1; background:#fff; border:1px solid #29a8e1; border-radius:3px; text-decoration:none; padding:6px 16px; margin-left:10px;}
+.choose .bg_none .more_add:hover{ background:#29a8e1; color:#fff;}
+/******/
+
+/*** 更多操作 ***/
+.more_handle li{ float:left; height:100px; width:150px; margin:15px 15px 15px 0; background:#e6f5fb; border-radius:5px;}
+.more_handle li a{ display:block; height:50px; line-height:50px; text-align:center; background:url(/images/ty_icon.png) 15px -935px no-repeat; padding-left:25px; margin-top:25px; color:#333; text-decoration:none;}
+.more_handle li a:hover{ background-position:15px -985px; color:#29a8e1;}
+.more_handle li .add{ background-position:10px -635px;}
+.more_handle li .add:hover{ background-position:10px -685px; color:#29a8e1;}
+.more_handle li .red{ background-position:30px -1035px;}
+.more_handle li .red:hover{ background-position:30px -1085px; color:#29a8e1;}
+/******/
+
+/*** 设置 ***/
+.account{ margin:30px; border-top:1px solid #ddd;}
+.account .my_information{ border-bottom:1px solid #ddd;}
+.my_information .shezhi{ margin:20px 0;}
+.my_information .shezhi a{ height:40px; line-height:40px; color:#333;}
+.my_information .shezhi a:hover{ color:#29a8e1;}
+.my_information h4{ padding-left:40px; background:url(/images/lock.png) left top no-repeat; height:40px; line-height:40px;}
+.my_information .real02{ background-position:left -100px;}
+.my_information .real03{ background-position:left -200px;}
+.my_information .real04{ background-position:left -300px;}
+.my_information .login{ margin-bottom:20px; width:1000px; margin:0 auto 30px auto;}
+.my_information .login li{ margin-bottom:20px; line-height:40px; min-height:40px; _height:40px;}
+.my_information .login li label{ float:left; width:320px; text-align:right; height:40px; line-height:40px; margin-right:5px; color:#333;}
+.my_information .login li input{ width:280px; height:38px; border:1px solid #ddd; border-radius:5px; padding-left:3px;}
+.my_information .login li .btn_submit{ background:#29a8e1; color:#fff; border:0;}
+.my_information .login li .btn_submit:hover{ background:#2bb4f1;}
+.my_information .login li .choice{ width:inherit; height:inherit; vertical-align:middle; margin-left:10px; _height:24px; _width:24px; border:0; _margin-top:8px;}
+.my_information .login li span{ _padding-top:10px;}
+.my_information .login li .pos_rule{margin-left:320px; color:#888; margin-bottom:20px; line-height:180%;}
+
+.pos_onoff{ border-bottom:1px solid #ddd; width:1000px; margin:0 auto; padding-bottom:10px;}
+.on_off{ width:450px; margin:10px auto 30px auto;}
+.on_off p{ height:30px; line-height:30px; font-size:14px;}
+.on_off p span{ float:left;}
+.on_off p .onoff{ height:20px; width:35px; background:url(/images/onoff.jpg) left top no-repeat; display:block; float:left; margin-top:6px; margin-left:7px;}
+.on_off p .onoff01{ background:url(/images/onoff.jpg) left bottom no-repeat; display:block; float:left; margin-top:6px;}
+/******/
+
+/*** 消息中心 ***/
+.message{ margin:30px;}
+.message ul{ background:url(/images/message_bg.png) 10px 10px no-repeat;}
+.message_con{ border:1px solid #ddd; border-radius:30px; color:#333; height:60px; line-height:60px; padding:0 30px; margin:0 0 28px 60px;}
+.message_con span{ color:#999;}
+.message .page{ text-align:center; height:24px;}
+.message .page a{ margin:10px; color:#333; padding:4px 10px; border:1px solid #ddd; border-radius:15px; text-decoration:none;}
+.message .page a:hover,.message .page .current{ background:#29a8e1; border:1px solid #29a8e1; color:#fff;}
+.message .page .page_left{ padding:4px 8px;}
+/******/
+
+/*** 货币简介 ***/
+.product{ margin:30px;width:160px;}
+.product p{ color:#888; font-size:14px;}
+.product .plus_btn{ display:block; height:40px; line-height:40px; width:130px; text-align:center; margin:15px 0; border:1px solid #29a8e1; border-radius:5px; color:#29a8e1; text-decoration:none;}
+.product .plus_btn:hover{ background:#29a8e1; color:#fff;}
+.coin_con{ margin:0 20px 20px 0;}
+.product_right{ margin-left:220px;}
+.product_title{ height:80px; line-height:80px; margin-right:30px; color:#333;}
+.product_title a{ color:#333;}
+.product_title a:hover{ color:#29a8e1;}
+.coin_word p{text-indent:2em; line-height:24px; color:#888; margin:20px 30px 20px 10px;}
+/******/
+
+/*** RPC控制台 ***/
+.my_wallet ul li .about_btn{ color:#29a8e1;}
+.about_btn{ background:url(/images/ty_back.png) left -299px no-repeat; padding-left:20px; text-decoration:none;}
+.about_btn:hover{ text-decoration:underline;}
+.about_open{ background-position:left -349px;}
+.about{ border:1px solid #ccc; border-top:0; padding:10px 0; background:#e6f5fb;}
+.about li{ width:33%; float:left; color:#666; border-right:1px solid #ccc;}
+.about li h3{ font-size:16px; line-height:240%; color:#333; text-align:center;}
+.about li p{ width:310px; margin:0 auto; color:#333;}
+.about li p span{ display:block; margin-right:10px; color:#666; width:150px; text-align:right; float:left;}
+.about .about_end{ border:0;}
+.console li input{ width:600px;}
+.screen{ color:#f00; background:#FFF url(/images/ty_back.png) 12px -186px no-repeat; text-decoration:none; position:fixed; right:30px; top:510px; border:1px solid #ddd; padding:2px 15px 2px 35px; border-radius:5px;}
+.screen:hover{ color:#29a8e1; background-position:12px -236px; border:1px solid #29a8e1;}
+.output{ margin-top:20px;}
+.output .time{ color:#29a8e1; height:24px; line-height:24px; padding:0 10px; border:1px solid #29a8e1; border-radius:20px; margin:0 10px 0 90px;}
+.output_con{ border-bottom:1px solid #eee; padding-bottom:10px;}
+.output_con h3{ color:#29a8e1; height:26px; line-height:26px;}
+.output_con p{ line-height:160%;}
+/******/
+
+.question{ padding-left:50px;}
+.answers{ padding-left:50px;}
+
+.no_con{ margin-top:150px;}
+.no_con p{ text-align:center; font-size:18px; color:#333;}
+.no_con .plus{ width:160px; height:46px; line-height:46px; display:block; margin:20px auto; border:1px solid #29a8e1; color:#29a8e1; text-decoration:none; border-radius:5px;}
+.no_con .plus:hover{ background:#29a8e1; color:#fff; text-decoration:none;}
+.no_con a{ color:#29a8e1; margin:0 5px; text-decoration:none;}
+.no_con a:hover{ text-decoration:underline;}
+.modify{ color:#666;}
+.modify:hover{ color:#29a8e1;}
+//.blocks{background:url(/images/loading02.gif) 125px top no-repeat; margin-top:10px;}
+.blocks{ margin-top:15px;}
+.blocks p{text-align:center;margin-left:0px;margin-right:20px;padding-right:20px;}
+.tishi{color:#999; margin-left:5px; height:40px; font-size:14px; width:360px; padding-right:20px; display:table-cell; vertical-align:middle;}
+.tishi span{ line-height:20px;}
+/*** tab ***/
+.left_tab .current{ background-color:#fff; color:#29a8e1; border:1px solid #29a8e1; border-bottom:1px solid #fff;}
+#tags{ width:300px; margin:0 auto 20px auto; border:1px solid #29a8e1; border-radius:10px; height:30px;}
+#tags li{ float:left; height:30px; line-height:30px; width:150px; text-align:center;}
+#tags li a{ text-decoration:none; color:#29a8e1; display:block;}
+#tags .selectTag a{ background:#29a8e1; color:#fff;}
+#tags #left_round a{ border-radius:7px 0 0 7px;}
+#tags #right_round a{ border-radius:0 7px 7px 0;}
+#tagContent div.selectTag { display: block;}
+.tagContent { }
+/******/
+

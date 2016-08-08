@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?=$lang->main->message?>- <?=$lang->common->taiyi?></title>
+<link href="css/<?=$l?>/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="css/<?=$l?>/home.css" />
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/raphael.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+</head>
+
+<body>
+
+<?php include PATH_TPL . '/'. LANG ."/header.tpl.phtml" ?>
+<div id="main">
+	<!-- 消息 开始 -->
+	<div class="my_wallet my_add clearfix">
+		<h2 class="Font18 left"><?=$lang->main->message?></h2>
+	</div>
+	<div class="message" style="<?php if(!count($tDatas)){echo 'background:none;';}?>">
+		<?
+		if(count($tDatas) > 0){
+		?>
+		<ul class="Font14">
+			<?php		
+			foreach($tDatas as $tkey => $tRow){?>
+			<li class="message_con"><span class="right"><?=date('Y-m-d H:i:s',$tRow['created'])?></span><?=$tRow['content']?> </li>
+			<?}?>
+		</ul>
+		<?}else{?>
+			<div class="no_con">
+				<p><?=$lang->message->message1?></p>
+			</div>
+		<?}?>
+
+		<p class="page"><?=$pageinfo?></p>
+	</div>
+	<!-- 消息 结束 -->
+</div>
+<?php include PATH_TPL . '/'. LANG ."/footer.tpl.phtml" ?>	
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?=$lang->wallet->address_book?> - <?=$lang->common->taiyi?></title>
+<link href="/css/<?=$l?>/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="/css/<?=$l?>/home.css" />
+
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/raphael.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="/js/ZeroClipboard.js"></script>
+</head>
+
+<body>
+<?php include PATH_TPL . '/'. LANG ."/header.tpl.phtml" ?>
+<div id="main">
+	<?php include PATH_TPL . '/'. LANG ."/cfos/wallet/wallet.header.tpl.phtml" ?>	
+	<!-- 地址簿 开始 -->
+	<div class="my_wallet my_add clearfix">
+		<h2 class="Font18 left"><?=$lang->wallet->address_book?></h2>
+		<div class="Font14 right operate_wallet">
+			<a href="/cfos_wallet/sendaddressadd?wallet=<?=$tWallet?>" class="plus"><?=$lang->wallet->add_new_address?></a>
+			<a href="/cfos_wallet/more?wallet=<?=$tWallet?>"><?=$lang->wallet->back_for_more_options?></a>
+		</div>
+	</div>
+	<div class="wallet wallet_tabel clearfix">
+		<table cellpadding="0" cellspacing="0" class="Font14 add_tabel">
+			<thead>
+				<tr>
+					<th><?=$lang->wallet->address_label?></th>
+					<th><?=$lang->wallet->address?></th>
+					<th><?=$lang->common->action?></th>
+				</tr>
+			</thead>
+			<tbody id='tBody'>
+			</tbody>
+		</table>
+	</div>
+	<!-- 地址簿 结束 -->
+
+</div>
+<?php include PATH_TPL . '/'. LANG ."/cfos/wallet/wallet.footer.tpl.phtml" ?>
+<?php include PATH_TPL . '/'. LANG ."/footer.tpl.phtml" ?>
+</body>
+</html>
+<script>
+$(function(){
+	sendaddress();
+	
+	waitingsend = true;
+	window.setInterval(function(){
+		if(waitingsend){
+			sendaddress();
+		}
+	},1000);
+
+})
+function  sendaddress(){
+	$('#tBody').html('<img src="/images/loading02.gif">');
+	$.getJSON('/cfos_wallet/sendaddress?wallet=<?=$tWallet?>&backdata=ajax'+'&stamp='+Math.random(),function(obj){
+		waitingsend = false;
+		if(obj.status == 0){
+			$('#tBody').html(obj.msg);
+		}else if(obj.status == '-1'){
+			walletpassphrase('<?=$tWallet?>');
+		}else if(obj.status == '-102'){
+			js_alert('<?=$lang->wallet->message14?>');	
+		}else{
+			var str = '';
+			$.each(obj.data , function(key,tRow){
+				str += '<tr align="center"><td>'+tRow.account+'</td><td>'+tRow.address+'</td><td><a href="/cfos_wallet/sendtoaddress?wallet=<?=$tWallet?>&account='+tRow.account+'&address='+tRow.address+'" class="send"><?=$lang->main->send?></a><a href="/cfos_wallet/sendaddressedit?wallet=<?=$tWallet?>&account='+tRow.account+'&address='+tRow.address+'" class=\'modify\'><?=$lang->common->change?></a>&nbsp;&nbsp;<a href="#" class="copyit modify" data="'+tRow.address+'"><?=$lang->common->copy?></a></td></tr>';
+			
+			});
+			$('#tBody').html(str);
+			copyThis();
+		}
+	});		
+}
+
+</script>
